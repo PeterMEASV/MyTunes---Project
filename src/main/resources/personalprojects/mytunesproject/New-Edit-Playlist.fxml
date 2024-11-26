@@ -5,12 +5,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personalprojects.mytunesproject.gui.newPlaylistController">
+<AnchorPane prefHeight="176.0" prefWidth="293.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personalprojects.mytunesproject.gui.NewPlaylistController">
    <children>
-      <Label layoutX="69.0" layoutY="41.0" text="Name:" />
-      <TextField fx:id="txtPlaylistName" layoutX="122.0" layoutY="37.0" />
-      <Button fx:id="btnSavePlaylist" layoutX="237.0" layoutY="78.0" mnemonicParsing="false" text="Save" />
-      <Button fx:id="btnCancelPlaylist" layoutX="179.0" layoutY="78.0" mnemonicParsing="false" text="Cancel" />
+      <Label layoutX="29.0" layoutY="42.0" text="Name:" />
+      <TextField fx:id="txtPlaylistName" layoutX="77.0" layoutY="38.0" />
+      <Button fx:id="btnSavePlaylist" layoutX="192.0" layoutY="78.0" mnemonicParsing="false" text="Save" />
+      <Button fx:id="btnCancelPlaylist" layoutX="119.0" layoutY="78.0" mnemonicParsing="false" text="Cancel" />
    </children>
 </AnchorPane>

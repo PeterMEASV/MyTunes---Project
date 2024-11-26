@@ -34,10 +34,36 @@ public class MyTunesController {
     public void btnMoveToPlaylist(ActionEvent actionEvent) {
     }
     @FXML
-    public void btnNewPlaylist(ActionEvent actionEvent) {
+    public void btnNewPlaylist(ActionEvent actionEvent) throws IOException  {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Playlist.fxml"));
+        Parent scene = loader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(scene));
+
+        NewPlaylistController controller = loader.getController();
+        controller.setParent(this);
+
+        stage.setTitle("New/Edit Playlist");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
     @FXML
-    public void btnEditPlaylist(ActionEvent actionEvent) {
+    public void btnEditPlaylist(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Playlist.fxml"));
+        Parent scene = loader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(scene));
+
+        NewPlaylistController controller = loader.getController();
+        controller.setParent(this);
+
+        stage.setTitle("New/Edit Playlist");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
     @FXML
     public void btnDeletePlaylist(ActionEvent actionEvent) {
@@ -55,7 +81,7 @@ public class MyTunesController {
     public void btnNewSong(ActionEvent actionEvent) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource( "New-Edit-Songs.fxml"));
+        loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Songs.fxml"));
         Parent scene = loader.load();
 
         Stage stage = new Stage();
@@ -70,7 +96,20 @@ public class MyTunesController {
 
     }
     @FXML
-    public void btnEditSong(ActionEvent actionEvent) {
+    public void btnEditSong(ActionEvent actionEvent) throws IOException  {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Songs.fxml"));
+        Parent scene = loader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(scene));
+
+        NewSongController controller = loader.getController();
+        controller.setParent(this);
+
+        stage.setTitle("New/Edit Songs");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
     @FXML
     public void btnDeleteSong(ActionEvent actionEvent) {

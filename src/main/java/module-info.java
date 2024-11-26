@@ -2,8 +2,8 @@ module personalprojects.mytunesproject {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-    requires com.microsoft.sqlserver.jdbc;
     requires java.naming;
+    requires com.microsoft.sqlserver.jdbc;
 
 
     opens personalprojects.mytunesproject to javafx.fxml;
