@@ -10,6 +10,7 @@ public class NewPlaylistController {
     @FXML
     private TextField txtPlaylistName;
 
+
     public void setParent(MyTunesController myTunesController) {
 
     }

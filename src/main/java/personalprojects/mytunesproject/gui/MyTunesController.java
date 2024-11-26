@@ -1,5 +1,6 @@
 package personalprojects.mytunesproject.gui;
 
+// import java
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,9 +14,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import personalprojects.mytunesproject.HelloApplication;
-
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+// import Project
+import personalprojects.mytunesproject.BE.Song;
+import personalprojects.mytunesproject.BLL.SongManager;
+import personalprojects.mytunesproject.gui.Model.SongModel;
 
 public class MyTunesController {
     @FXML
@@ -23,12 +29,19 @@ public class MyTunesController {
     @FXML
     private Label txtCurrentlyPlaying;
     @FXML
-    private TableView lstPlayList;
+    private TableView<Song> lstPlayList;
     @FXML
     private ListView lstPlaylistSongs;
     @FXML
-    private TableView lstSongs;
+    private TableView<Song> lstSongs;
 
+    private SongModel songModel;
+
+
+    public void initialize() throws Exception {
+        songModel = new SongModel();
+        lstSongs.setItems(songModel.getObservableSongs());
+    }
 
 
     @FXML
