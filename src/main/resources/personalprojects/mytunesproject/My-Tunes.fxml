@@ -9,12 +9,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personalprojects.mytunesproject.gui.MyTunesController">
    <children>
-      <Button fx:id="btnLastSong" layoutX="40.0" layoutY="27.0" mnemonicParsing="false" text="&lt;" />
-      <Button fx:id="btnPlay" layoutX="93.0" layoutY="27.0" mnemonicParsing="false" text="=" />
-      <Button fx:id="btnNextSong" layoutX="145.0" layoutY="27.0" mnemonicParsing="false" text="&gt;" />
-      <Button fx:id="btnSearch" layoutX="730.0" layoutY="27.0" mnemonicParsing="false" text="Search" />
+      <Button layoutX="40.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnLastSong" text="&lt;" />
+      <Button layoutX="93.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnPlay" text="=" />
+      <Button layoutX="145.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnNextSong" text="&gt;" />
+      <Button layoutX="730.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnSearch" text="Search" />
       <TextField fx:id="txtSearch" layoutX="563.0" layoutY="27.0" />
       <Label layoutX="525.0" layoutY="32.0" text="Filter:" />
       <Label fx:id="txtCurrentlyPlaying" layoutX="281.0" layoutY="32.0" text="Music playing" />
@@ -35,19 +35,19 @@
             <TableColumn prefWidth="59.0" text="Time" />
          </columns>
       </TableView>
-      <Button fx:id="btnMoveToPlaylist" layoutX="386.0" layoutY="134.0" mnemonicParsing="false" text="&lt;" />
+      <Button layoutX="386.0" layoutY="134.0" mnemonicParsing="false" onAction="#btnMoveToPlaylist" text="&lt;" />
       <Label layoutX="231.0" layoutY="77.0" text="Songs on playlist" />
       <Label layoutX="420.0" layoutY="77.0" text="Songs" />
-      <Button fx:id="btnNewPlaylist" layoutX="12.0" layoutY="480.0" mnemonicParsing="false" text="New" />
-      <Button fx:id="btnEditPlaylist" layoutX="59.0" layoutY="480.0" mnemonicParsing="false" text="Edit" />
-      <Button fx:id="btnDeletePlaylist" layoutX="105.0" layoutY="480.0" mnemonicParsing="false" text="Delete" />
-      <Button fx:id="btnMoveUp" layoutX="231.0" layoutY="480.0" mnemonicParsing="false" text="Up" />
-      <Button fx:id="btnMoveDown" layoutX="269.0" layoutY="480.0" mnemonicParsing="false" text="Down" />
-      <Button fx:id="btnDeleteFromPlaylist" layoutX="323.0" layoutY="480.0" mnemonicParsing="false" text="Delete" />
-      <Button fx:id="btnNewSong" layoutX="420.0" layoutY="480.0" mnemonicParsing="false" text="New" />
-      <Button fx:id="btnEditSong" layoutX="470.0" layoutY="480.0" mnemonicParsing="false" text="Edit" />
-      <Button fx:id="btnDeleteSong" layoutX="514.0" layoutY="480.0" mnemonicParsing="false" text="Delete" />
-      <Button fx:id="btnCloseProgram" layoutX="723.0" layoutY="480.0" mnemonicParsing="false" text="Close" />
-      <Slider fx:id="sliderVolume" layoutX="35.0" layoutY="54.0" />
+      <Button layoutX="12.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnNewPlaylist" text="New" />
+      <Button layoutX="59.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnEditPlaylist" text="Edit" />
+      <Button layoutX="105.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnDeletePlaylist" text="Delete" />
+      <Button layoutX="231.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnMoveUp" text="Up" />
+      <Button layoutX="269.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnMoveDown" text="Down" />
+      <Button layoutX="323.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnDeleteFromPlaylist" text="Delete" />
+      <Button layoutX="420.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnNewSong" text="New" />
+      <Button layoutX="470.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnEditSong" text="Edit" />
+      <Button layoutX="514.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnDeleteSong" text="Delete" />
+      <Button layoutX="723.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnCloseProgram" text="Close" />
+      <Slider layoutX="35.0" layoutY="54.0" onDragDetected="#sliderVolume" />
    </children>
 </AnchorPane>
