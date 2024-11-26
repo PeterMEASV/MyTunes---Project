@@ -17,7 +17,7 @@
       <Button fx:id="btnSearch" layoutX="730.0" layoutY="27.0" mnemonicParsing="false" text="Search" />
       <TextField fx:id="txtSearch" layoutX="563.0" layoutY="27.0" />
       <Label layoutX="525.0" layoutY="32.0" text="Filter:" />
-      <Label layoutX="281.0" layoutY="32.0" text="Music playing" />
+      <Label fx:id="txtCurrentlyPlaying" layoutX="281.0" layoutY="32.0" text="Music playing" />
       <TableView fx:id="lstPlayList" layoutX="14.0" layoutY="100.0" prefHeight="367.0" prefWidth="205.0">
         <columns>
           <TableColumn prefWidth="75.0" text="Name" />
@@ -45,9 +45,9 @@
       <Button fx:id="btnMoveDown" layoutX="269.0" layoutY="480.0" mnemonicParsing="false" text="Down" />
       <Button fx:id="btnDeleteFromPlaylist" layoutX="323.0" layoutY="480.0" mnemonicParsing="false" text="Delete" />
       <Button fx:id="btnNewSong" layoutX="420.0" layoutY="480.0" mnemonicParsing="false" text="New" />
-      <Button layoutX="470.0" layoutY="480.0" mnemonicParsing="false" text="Edit" />
-      <Button layoutX="514.0" layoutY="480.0" mnemonicParsing="false" text="Delete" />
-      <Button layoutX="723.0" layoutY="480.0" mnemonicParsing="false" text="Close" />
+      <Button fx:id="btnEditSong" layoutX="470.0" layoutY="480.0" mnemonicParsing="false" text="Edit" />
+      <Button fx:id="btnDeleteSong" layoutX="514.0" layoutY="480.0" mnemonicParsing="false" text="Delete" />
+      <Button fx:id="btnCloseProgram" layoutX="723.0" layoutY="480.0" mnemonicParsing="false" text="Close" />
       <Slider fx:id="sliderVolume" layoutX="35.0" layoutY="54.0" />
    </children>
 </AnchorPane>
