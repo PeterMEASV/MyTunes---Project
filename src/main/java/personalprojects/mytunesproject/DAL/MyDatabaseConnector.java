@@ -1,4 +1,4 @@
-package easv.mrs.DAL.db;
+package personalprojects.mytunesproject.DAL;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class MyDatabaseConnector {
 
-    private static final String PROP_FILE = "config/database.settings";
+    private static final String PROP_FILE = "Config/config.settings";
     private SQLServerDataSource dataSource;
 
     public MyDatabaseConnector() throws IOException {
