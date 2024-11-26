@@ -1,6 +1,7 @@
 module personalprojects.mytunesproject {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
 
     opens personalprojects.mytunesproject to javafx.fxml;
