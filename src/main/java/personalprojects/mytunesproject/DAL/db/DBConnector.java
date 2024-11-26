@@ -1,4 +1,4 @@
-package personalprojects.mytunesproject.DAL;
+package personalprojects.mytunesproject.DAL.db;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.Properties;
 
-public class MyDatabaseConnector {
+public class DBConnector {
 
     private static final String PROP_FILE = "Config/config.settings";
     private SQLServerDataSource dataSource;
 
-    public MyDatabaseConnector() throws IOException {
+    public DBConnector() throws IOException {
         Properties databaseProperties = new Properties();
         databaseProperties.load(new FileInputStream(new File(PROP_FILE)));
 
@@ -33,7 +33,7 @@ public class MyDatabaseConnector {
 
 
     public static void main(String[] args) throws Exception {
-        MyDatabaseConnector databaseConnector = new MyDatabaseConnector();
+        DBConnector databaseConnector = new DBConnector();
 
         try (Connection connection = databaseConnector.getConnection()) {
             System.out.println("Is it open? " + !connection.isClosed());
