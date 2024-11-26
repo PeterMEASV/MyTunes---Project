@@ -3,6 +3,7 @@ package personalprojects.mytunesproject.gui;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -116,7 +117,8 @@ public class MyTunesController {
     }
     @FXML
     private void btnCloseProgram(ActionEvent actionEvent) {
-        
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
     }
     @FXML
     private void sliderVolume(MouseEvent mouseEvent) {
