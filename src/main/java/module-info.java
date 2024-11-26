@@ -5,4 +5,6 @@ module personalprojects.mytunesproject {
 
     opens personalprojects.mytunesproject to javafx.fxml;
     exports personalprojects.mytunesproject;
+    exports personalprojects.mytunesproject.gui;
+    opens personalprojects.mytunesproject.gui to javafx.fxml;
 }

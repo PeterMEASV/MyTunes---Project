@@ -1,4 +1,4 @@
-package personalprojects.mytunesproject;
+package personalprojects.mytunesproject.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
