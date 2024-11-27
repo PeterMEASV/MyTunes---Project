@@ -3,6 +3,7 @@ package personalprojects.mytunesproject.gui;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -15,8 +16,6 @@ public class NewSongController {
     private TextField txtSongTitle;
     @FXML
     private TextField txtSongArtist;
-    @FXML
-    private TextField txtCategory;
     @FXML
     private TextField txtTimer;
     @FXML
@@ -56,6 +55,33 @@ public class NewSongController {
     }
     @FXML
     private void btnSaveSong(ActionEvent actionEvent) {
+        if (!txtSongTitle.getText().isEmpty() && !txtSongArtist.getText().isEmpty() && !txtTimer.getText().isEmpty()) {
+            int songDuration = calculateSeconds();
+            System.out.println(songDuration);
+
+        }
+    }
+    private int calculateSeconds()
+    {
+        try{
+            String[] parts = txtTimer.getText().split(":");
+
+            int minutes = Integer.parseInt(parts[0]);
+            int seconds = Integer.parseInt(parts[1]);
+            return (minutes*60) + seconds;
+        }
+        catch(ArrayIndexOutOfBoundsException | NumberFormatException e)
+        {
+            showErrorAlert("Invalid Song length", "Please input the duration of the song.");
+            return -1;
+        }
+    }
+    public static void showErrorAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null); // Optional: no header
+        alert.setContentText(message);
+        alert.showAndWait(); // Waits for the user to close the alert
     }
 
 }

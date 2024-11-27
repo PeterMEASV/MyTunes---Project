@@ -13,11 +13,10 @@
       <Label layoutX="67.0" layoutY="106.0" text="Category:" />
       <Label layoutX="90.0" layoutY="146.0" text="Time:" />
       <Label layoutX="94.0" layoutY="180.0" text="File:" />
-      <TextField fx:id="txtSongTitle" layoutX="145.0" layoutY="24.0" />
-      <TextField fx:id="txtSongArtist" layoutX="145.0" layoutY="67.0" />
-      <TextField fx:id="txtTimer" layoutX="145.0" layoutY="142.0" prefHeight="26.0" prefWidth="83.0" />
-      <TextField fx:id="txtFileName" layoutX="145.0" layoutY="176.0" />
-      <Button layoutX="259.0" layoutY="102.0" mnemonicParsing="false" onAction="#btnMore" text="More" />
+      <TextField fx:id="txtSongTitle" layoutX="145.0" layoutY="24.0" promptText="Enter song name" />
+      <TextField fx:id="txtSongArtist" layoutX="145.0" layoutY="67.0" promptText="Enter Artist name" />
+      <TextField fx:id="txtTimer" layoutX="145.0" layoutY="142.0" prefHeight="26.0" prefWidth="83.0" promptText="min:sec" />
+      <TextField fx:id="txtFileName" layoutX="145.0" layoutY="176.0" promptText="Input file path" />
       <Button layoutX="327.0" layoutY="176.0" mnemonicParsing="false" onAction="#btnChooseFile" text="Choose" />
       <Button layoutX="277.0" layoutY="218.0" mnemonicParsing="false" onAction="#btnCancelNewSong" text="Cancel" />
       <Button layoutX="342.0" layoutY="218.0" mnemonicParsing="false" onAction="#btnSaveSong" text="Save" />
