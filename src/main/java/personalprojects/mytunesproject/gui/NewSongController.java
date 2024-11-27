@@ -23,6 +23,9 @@ public class NewSongController {
     private TextField txtFileName;
     @FXML
     private ChoiceBox<String> DropDownCategory;
+
+
+    // TODO: Husk at implementere flere typer, eller anden måde at modtage kategorier.
     private String[] testObjects = {"Pop", "Rock", "Rap", "Disco", "Jazz", "House"};
 
     public void initialize() {
