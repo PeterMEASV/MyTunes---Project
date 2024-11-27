@@ -3,6 +3,7 @@ import personalprojects.mytunesproject.BE.Song;
 import personalprojects.mytunesproject.DAL.ISongDataAccess;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +77,18 @@ DBConnector db;
     }
 
     @Override
-    public void deleteSong(Song song) {
+    public void deleteSong(Song song) throws Exception {
+        String sql = "DELETE FROM dbo.Songs WHERE SongID = ?";
+
+        try(Connection conn = db.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setInt(1, song.getSongID());
+            stmt.executeUpdate();
+        }
+        catch (SQLException ex)
+        {
+            throw new Exception("Could not get movies from database.", ex);
+        }
     }
 }

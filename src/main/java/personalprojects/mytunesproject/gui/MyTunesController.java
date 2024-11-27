@@ -232,7 +232,11 @@ public class MyTunesController implements Initializable {
                 } else if ("songFromPlaylist".equals(itemType)) {
                     playlistModel.removeSongFromPlaylist((Song) selectedItem);
                 } else if ("song".equals(itemType)) {
-                    songModel.deleteSong((Song) selectedItem);
+                    try {
+                        songModel.deleteSong((Song) selectedItem);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
 
 

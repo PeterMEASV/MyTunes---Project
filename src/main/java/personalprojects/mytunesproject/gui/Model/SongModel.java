@@ -25,7 +25,9 @@ public class SongModel {
         return lstSongs;
     }
 
-    public void deleteSong(Song selectedSong) {
+    public void deleteSong(Song selectedSong) throws Exception {
+        songManager.deleteSong(selectedSong);
+        lstSongs.remove(selectedSong);
     }
 }
 

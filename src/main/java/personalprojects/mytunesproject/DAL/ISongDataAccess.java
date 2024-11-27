@@ -11,5 +11,5 @@ public interface ISongDataAccess {
 
     void updateSong(Song song);
 
-    void deleteSong(Song song);
+    void deleteSong(Song song) throws Exception;
 }

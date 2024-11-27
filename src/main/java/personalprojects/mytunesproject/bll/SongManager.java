@@ -25,4 +25,8 @@ public class SongManager {
     public void createSong(Song song) throws Exception {
         songDAO_db.CreateSong(song);
     }
+
+    public void deleteSong(Song selectedSong) throws Exception {
+        songDAO_db.deleteSong(selectedSong);
+    }
 }
