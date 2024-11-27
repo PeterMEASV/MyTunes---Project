@@ -26,10 +26,11 @@ DBConnector db;
                 int SongID = rs.getInt("SongID");
                 String Name = rs.getString("Name");
                 String Artist = rs.getString("Artist");
-                String Duration = rs.getString("Duration");
+                int Duration = rs.getInt("Duration");
                 String Category = rs.getString("Category");
+                String filePath = rs.getString("FilePath");
 
-                Song song = new Song(SongID, Name, Artist, Duration, Category);
+                Song song = new Song(SongID, Name, Artist, Duration, Category, filePath);
                 allSongs.add(song);
             }
             return allSongs;
@@ -42,7 +43,7 @@ DBConnector db;
 
     @Override
     public Song CreateSong(Song newSong) throws Exception {
-        String sql = "INSERT INTO dbo.Songs(Name, Artist, Duration, Category) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO dbo.Songs(Name, Artist, Duration, Category, FilePath) VALUES (?,?,?,?,?)";
         Song song = newSong;
 
         try (Connection conn = db.getConnection()){
@@ -50,8 +51,9 @@ DBConnector db;
 
             stmt.setString(1, song.getName());
             stmt.setString(2,song.getArtist());
-            stmt.setString(3, song.getDuration());
+            stmt.setInt(3, song.getDuration());
             stmt.setString(4, song.getCategory());
+            stmt.setString(5, song.getFilePath());
 
             stmt.executeUpdate();
 
@@ -62,7 +64,7 @@ DBConnector db;
                 SongID = rs.getInt(1);
             }
 
-            Song createdSong = new Song(SongID, song.getName(), song.getArtist(), song.getDuration(), song.getCategory());
+            Song createdSong = new Song(SongID, song.getName(), song.getArtist(), song.getDuration(), song.getCategory(), song.getFilePath());
 
             return createdSong;
         }
