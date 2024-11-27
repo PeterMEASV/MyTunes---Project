@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 // import Project
 import personalprojects.mytunesproject.BE.Song;
@@ -113,21 +114,12 @@ public class MyTunesController implements Initializable {
         stage.show();
     }
 
-
-    @FXML
-    private void btnDeletePlaylist(ActionEvent actionEvent) {
-    }
-
     @FXML
     private void btnMoveUp(ActionEvent actionEvent) {
     }
 
     @FXML
     private void btnMoveDown(ActionEvent actionEvent) {
-    }
-
-    @FXML
-    private void btnDeleteFromPlaylist(ActionEvent actionEvent) {
     }
 
     @FXML
@@ -164,9 +156,6 @@ public class MyTunesController implements Initializable {
         stage.show();
     }
 
-    @FXML
-    private void btnDeleteSong(ActionEvent actionEvent) {
-    }
 
     @FXML
     private void btnCloseProgram(ActionEvent actionEvent) {
@@ -194,4 +183,65 @@ public class MyTunesController implements Initializable {
 
     public void sliderVolume(MouseEvent mouseEvent) {
     }
+
+    @FXML
+    private void btnDeletePlaylist(ActionEvent actionEvent) {
+        Playlist selectedPlaylist = lstPlayList.getSelectionModel().getSelectedItem();
+        deleteItem(selectedPlaylist, "playlist");
+    }
+
+    @FXML
+    private void btnDeleteFromPlaylist(ActionEvent actionEvent) {
+        Song selectedSong = lstPlaylistSongs.getSelectionModel().getSelectedItem();
+        deleteItem(selectedSong, "songFromPlaylist");
+    }
+
+    @FXML
+    private void btnDeleteSong(ActionEvent actionEvent) {
+        Song selectedSong = lstSongs.getSelectionModel().getSelectedItem();
+        deleteItem(selectedSong, "song");
+    }
+
+    private void deleteItem(Object selectedItem, String itemType) {
+        if (selectedItem == null) {
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Item Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select an item to delete.");
+            alert.showAndWait();
+            return;
+        }
+
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Confirm Deletion");
+        confirmationAlert.setHeaderText("Are you sure you want to delete this item?");
+
+        if ("playlist".equals(itemType)) {
+            confirmationAlert.setContentText("The songs in the playlist will not be deleted.");
+        } else if ("songFromPlaylist".equals(itemType)) {
+            confirmationAlert.setContentText("This song will only be removed from the playlist, not deleted from the system.");
+        } else if ("song".equals(itemType)) {
+            confirmationAlert.setContentText("This song will be deleted from the list.");
+        }
+
+        confirmationAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                if ("playlist".equals(itemType)) {
+                    playlistModel.deletePlaylist((Playlist) selectedItem);
+                } else if ("songFromPlaylist".equals(itemType)) {
+                    playlistModel.removeSongFromPlaylist((Song) selectedItem);
+                } else if ("song".equals(itemType)) {
+                    songModel.deleteSong((Song) selectedItem);
+                }
+
+
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Item Deleted");
+                successAlert.setContentText("The item has been deleted.");
+                successAlert.showAndWait();
+            }
+        });
+    }
+
 }
