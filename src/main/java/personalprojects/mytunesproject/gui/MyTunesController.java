@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -35,6 +36,14 @@ public class MyTunesController implements Initializable {
 
     private SongModel songModel;
     private PlaylistModel playlistModel;
+    @FXML
+    private TableColumn clnTitleSong;
+    @FXML
+    private TableColumn clnArtistSong;
+    @FXML
+    private TableColumn clnCategorySong;
+    @FXML
+    private TableColumn clnTimeSong;
 
     public MyTunesController() {
         try {
@@ -49,6 +58,10 @@ public class MyTunesController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         lstSongs.setItems(songModel.getObservableSongs());
+        clnTitleSong.setCellValueFactory(new PropertyValueFactory<>("name"));
+        clnArtistSong.setCellValueFactory(new PropertyValueFactory<>("artist"));
+        clnCategorySong.setCellValueFactory(new PropertyValueFactory<>("category"));
+        clnTimeSong.setCellValueFactory(new PropertyValueFactory<>("duration"));
         lstPlaylistSongs.setItems(songModel.getObservableSongs());
 
         lstPlayList.setItems(playlistModel.getObservablePlaylists());
