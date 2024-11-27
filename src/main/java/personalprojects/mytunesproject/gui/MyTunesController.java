@@ -218,7 +218,7 @@ public class MyTunesController implements Initializable {
         confirmationAlert.setHeaderText("Are you sure you want to delete this item?");
 
         if ("playlist".equals(itemType)) {
-            confirmationAlert.setContentText("The songs in the playlist will not be deleted.");
+            confirmationAlert.setContentText("The playlist will be deleted");
         } else if ("songFromPlaylist".equals(itemType)) {
             confirmationAlert.setContentText("This song will only be removed from the playlist, not deleted from the system.");
         } else if ("song".equals(itemType)) {
