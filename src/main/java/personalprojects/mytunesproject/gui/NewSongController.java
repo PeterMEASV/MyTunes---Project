@@ -3,6 +3,7 @@ package personalprojects.mytunesproject.gui;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -20,6 +21,13 @@ public class NewSongController {
     private TextField txtTimer;
     @FXML
     private TextField txtFileName;
+    @FXML
+    private ChoiceBox<String> DropDownCategory;
+    private String[] testObjects = {"Pop", "Rock", "Rap", "Disco", "Jazz", "House"};
+
+    public void initialize() {
+        DropDownCategory.getItems().addAll(testObjects);
+    }
 
     public void setParent(MyTunesController myTunesController) {
 
@@ -47,6 +55,4 @@ public class NewSongController {
     private void btnSaveSong(ActionEvent actionEvent) {
     }
 
-    public void DropDownCategory(ActionEvent actionEvent) {
-    }
 }
