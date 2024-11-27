@@ -24,6 +24,9 @@ public class SongModel {
     public ObservableList<Song> getObservableSongs() {
         return lstSongs;
     }
+
+    public void deleteSong(Song selectedSong) {
+    }
 }
 
 
