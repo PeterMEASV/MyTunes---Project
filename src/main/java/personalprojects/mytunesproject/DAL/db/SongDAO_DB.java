@@ -1,5 +1,5 @@
 package personalprojects.mytunesproject.DAL.db;
-import personalprojects.mytunesproject.BE.Song;
+import personalprojects.mytunesproject.be.Song;
 import personalprojects.mytunesproject.DAL.ISongDataAccess;
 
 import java.io.IOException;

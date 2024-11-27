@@ -1,4 +1,4 @@
-package personalprojects.mytunesproject.BE;
+package personalprojects.mytunesproject.be;
 
 public class Song {
 

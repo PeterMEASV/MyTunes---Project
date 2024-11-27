@@ -1,9 +1,9 @@
-package personalprojects.mytunesproject.BLL;
+package personalprojects.mytunesproject.bll;
 
 
 import personalprojects.mytunesproject.DAL.ISongDataAccess;
 import personalprojects.mytunesproject.DAL.db.SongDAO_DB;
-import personalprojects.mytunesproject.BE.Song;
+import personalprojects.mytunesproject.be.Song;
 
 import java.util.List;
 

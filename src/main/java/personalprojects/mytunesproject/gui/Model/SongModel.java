@@ -5,12 +5,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 //project
-import personalprojects.mytunesproject.BE.Song;
-import personalprojects.mytunesproject.BLL.SongManager;
+import personalprojects.mytunesproject.be.Song;
+import personalprojects.mytunesproject.bll.SongManager;
 
 public class SongModel {
 
     private ObservableList<Song> lstSongs;
+    private ObservableList<Song> songs;
     private SongManager songManager;
 
 

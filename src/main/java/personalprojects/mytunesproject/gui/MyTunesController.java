@@ -1,16 +1,13 @@
 package personalprojects.mytunesproject.gui;
 
-// import java
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -19,36 +16,58 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 // import Project
-import personalprojects.mytunesproject.BE.Song;
-import personalprojects.mytunesproject.BLL.SongManager;
+import personalprojects.mytunesproject.be.Song;
+import personalprojects.mytunesproject.be.Playlist;
+import personalprojects.mytunesproject.gui.Model.PlaylistModel;
 import personalprojects.mytunesproject.gui.Model.SongModel;
 
-public class MyTunesController {
+public class MyTunesController implements Initializable {
     @FXML
     private TextField txtSearch;
     @FXML
     private Label txtCurrentlyPlaying;
     @FXML
-    private TableView<Song> lstPlayList;
+    private TableView<Playlist> lstPlayList;
     @FXML
-    private ListView lstPlaylistSongs;
+    private ListView<Song> lstPlaylistSongs;
     @FXML
     private TableView<Song> lstSongs;
 
     private SongModel songModel;
+    private PlaylistModel playlistModel;
 
-
-    public void initialize() throws Exception {
-        songModel = new SongModel();
-        lstSongs.setItems(songModel.getObservableSongs());
+    public MyTunesController() {
+        try {
+            songModel = new SongModel();
+            playlistModel = new PlaylistModel();  // Ensure playlistModel is initialized here
+        } catch (Exception e) {
+            displayError(e);
+            e.printStackTrace();
+        }
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        lstSongs.setItems(songModel.getObservableSongs());
+        lstPlaylistSongs.setItems(songModel.getObservableSongs());
+
+        lstPlayList.setItems(playlistModel.getObservablePlaylists());
+    }
 
     @FXML
     private void btnMoveToPlaylist(ActionEvent actionEvent) {
     }
+
+    public void addNewPlaylist(String playlistName) {
+        Playlist newPlaylist = new Playlist(playlistName, 0, "00:00");
+
+        playlistModel.getObservablePlaylists().add(newPlaylist);
+
+        playlistModel.createPlaylist(newPlaylist);
+    }
+
     @FXML
-    private void btnNewPlaylist(ActionEvent actionEvent) throws IOException  {
+    private void btnNewPlaylist(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Playlist.fxml"));
         Parent scene = loader.load();
@@ -63,6 +82,7 @@ public class MyTunesController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
+
     @FXML
     private void btnEditPlaylist(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -79,21 +99,26 @@ public class MyTunesController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
+
+
     @FXML
     private void btnDeletePlaylist(ActionEvent actionEvent) {
     }
+
     @FXML
     private void btnMoveUp(ActionEvent actionEvent) {
     }
+
     @FXML
     private void btnMoveDown(ActionEvent actionEvent) {
     }
+
     @FXML
     private void btnDeleteFromPlaylist(ActionEvent actionEvent) {
     }
+
     @FXML
     private void btnNewSong(ActionEvent actionEvent) throws IOException {
-
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Songs.fxml"));
         Parent scene = loader.load();
@@ -107,10 +132,10 @@ public class MyTunesController {
         stage.setTitle("New/Edit Songs");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
-
     }
+
     @FXML
-    private void btnEditSong(ActionEvent actionEvent) throws IOException  {
+    private void btnEditSong(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Songs.fxml"));
         Parent scene = loader.load();
@@ -125,27 +150,35 @@ public class MyTunesController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
+
     @FXML
     private void btnDeleteSong(ActionEvent actionEvent) {
     }
+
     @FXML
     private void btnCloseProgram(ActionEvent actionEvent) {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
     }
-    @FXML
-    private void sliderVolume(MouseEvent mouseEvent) {
+
+    private void displayError(Exception e) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Something went wrong");
+        alert.showAndWait();
     }
-    @FXML
-    private void btnNextSong(ActionEvent actionEvent) {
+
+    public void btnLastSong(ActionEvent actionEvent) {
     }
-    @FXML
-    private void btnSearch(ActionEvent actionEvent) {
+
+    public void btnPlay(ActionEvent actionEvent) {
     }
-    @FXML
-    private void btnPlay(ActionEvent actionEvent) {
+
+    public void btnNextSong(ActionEvent actionEvent) {
     }
-    @FXML
-    private void btnLastSong(ActionEvent actionEvent) {
+
+    public void btnSearch(ActionEvent actionEvent) {
+    }
+
+    public void sliderVolume(MouseEvent mouseEvent) {
     }
 }
