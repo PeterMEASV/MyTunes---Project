@@ -7,10 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -36,11 +34,23 @@ public class MyTunesController {
     private TableView<Song> lstSongs;
 
     private SongModel songModel;
+    @FXML
+    private TableColumn clnTitleSong;
+    @FXML
+    private TableColumn clnArtistSong;
+    @FXML
+    private TableColumn clnCategorySong;
+    @FXML
+    private TableColumn clnTimeSong;
 
 
     public void initialize() throws Exception {
         songModel = new SongModel();
         lstSongs.setItems(songModel.getObservableSongs());
+        clnTitleSong.setCellValueFactory(new PropertyValueFactory<>("name"));
+        clnArtistSong.setCellValueFactory(new PropertyValueFactory<>("artist"));
+        clnCategorySong.setCellValueFactory(new PropertyValueFactory<>("category"));
+        clnTimeSong.setCellValueFactory(new PropertyValueFactory<>("duration"));
     }
 
 

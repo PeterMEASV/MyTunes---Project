@@ -10,4 +10,5 @@ module personalprojects.mytunesproject {
     exports personalprojects.mytunesproject;
     exports personalprojects.mytunesproject.gui;
     opens personalprojects.mytunesproject.gui to javafx.fxml;
+    opens personalprojects.mytunesproject.BE to javafx.base;
 }
