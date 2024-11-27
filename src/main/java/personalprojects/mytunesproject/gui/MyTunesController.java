@@ -16,8 +16,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 // import Project
-import personalprojects.mytunesproject.be.Song;
-import personalprojects.mytunesproject.be.Playlist;
+import personalprojects.mytunesproject.BE.Song;
+import personalprojects.mytunesproject.BE.Playlist;
 import personalprojects.mytunesproject.gui.Model.PlaylistModel;
 import personalprojects.mytunesproject.gui.Model.SongModel;
 

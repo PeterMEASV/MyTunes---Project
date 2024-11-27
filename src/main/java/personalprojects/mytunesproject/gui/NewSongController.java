@@ -55,10 +55,9 @@ public class NewSongController {
     }
     @FXML
     private void btnSaveSong(ActionEvent actionEvent) {
-        if (!txtSongTitle.getText().isEmpty() && !txtSongArtist.getText().isEmpty() && !txtTimer.getText().isEmpty()) {
+        if (!txtSongTitle.getText().isEmpty() && !txtSongArtist.getText().isEmpty() && !txtTimer.getText().isEmpty() && DropDownCategory.getValue() != null) {
             int songDuration = calculateSeconds();
-            System.out.println(songDuration);
-
+            String songGenre = DropDownCategory.getValue();
         }
     }
     private int calculateSeconds()

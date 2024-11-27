@@ -1,6 +1,6 @@
 package personalprojects.mytunesproject.DAL;
 
-import personalprojects.mytunesproject.be.Playlist;
+import personalprojects.mytunesproject.BE.Playlist;
 
 import java.util.List;
 

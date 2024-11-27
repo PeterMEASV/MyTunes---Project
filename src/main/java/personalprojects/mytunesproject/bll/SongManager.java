@@ -3,7 +3,7 @@ package personalprojects.mytunesproject.bll;
 
 import personalprojects.mytunesproject.DAL.ISongDataAccess;
 import personalprojects.mytunesproject.DAL.db.SongDAO_DB;
-import personalprojects.mytunesproject.be.Song;
+import personalprojects.mytunesproject.BE.Song;
 
 import java.util.List;
 

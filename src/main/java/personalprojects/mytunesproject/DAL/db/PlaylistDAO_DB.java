@@ -1,7 +1,7 @@
 package personalprojects.mytunesproject.DAL.db;
 
 import personalprojects.mytunesproject.DAL.IPlaylistDataAccess;
-import personalprojects.mytunesproject.be.Playlist;
+import personalprojects.mytunesproject.BE.Playlist;
 
 import java.util.ArrayList;
 import java.util.List;

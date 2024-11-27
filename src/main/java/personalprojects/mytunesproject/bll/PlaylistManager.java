@@ -2,7 +2,7 @@ package personalprojects.mytunesproject.bll;
 
 import personalprojects.mytunesproject.DAL.IPlaylistDataAccess;
 import personalprojects.mytunesproject.DAL.db.PlaylistDAO_DB;
-import personalprojects.mytunesproject.be.Playlist;
+import personalprojects.mytunesproject.BE.Playlist;
 
 import java.util.List;
 

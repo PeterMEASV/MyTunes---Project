@@ -5,7 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 //project
-import personalprojects.mytunesproject.be.Song;
+import personalprojects.mytunesproject.BE.Song;
 import personalprojects.mytunesproject.bll.SongManager;
 
 public class SongModel {

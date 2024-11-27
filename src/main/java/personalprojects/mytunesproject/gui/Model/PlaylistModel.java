@@ -1,6 +1,6 @@
 package personalprojects.mytunesproject.gui.Model;
 
-import personalprojects.mytunesproject.be.Playlist;
+import personalprojects.mytunesproject.BE.Playlist;
 
 
 import javafx.collections.FXCollections;
