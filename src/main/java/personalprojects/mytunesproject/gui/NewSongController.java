@@ -8,6 +8,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import personalprojects.mytunesproject.BE.Song;
+import personalprojects.mytunesproject.bll.SongManager;
 
 import java.io.File;
 
@@ -22,6 +24,7 @@ public class NewSongController {
     private TextField txtFileName;
     @FXML
     private ChoiceBox<String> DropDownCategory;
+    SongManager songManager = new SongManager();
 
 
     // TODO: Husk at implementere flere typer, eller anden måde at modtage kategorier.
@@ -55,9 +58,13 @@ public class NewSongController {
     }
     @FXML
     private void btnSaveSong(ActionEvent actionEvent) {
-        if (!txtSongTitle.getText().isEmpty() && !txtSongArtist.getText().isEmpty() && !txtTimer.getText().isEmpty() && DropDownCategory.getValue() != null) {
+        if (!txtSongTitle.getText().isEmpty() && !txtSongArtist.getText().isEmpty() && !txtTimer.getText().isEmpty() && DropDownCategory.getValue() != null && !txtFileName.getText().isEmpty()) {
             int songDuration = calculateSeconds();
             String songGenre = DropDownCategory.getValue();
+            // TODO: Ændre Song objektet: Duration skal være int (sekunder), tilføj FilePath.
+            //Song newSong = new Song(1, txtSongTitle, txtSongArtist, songDuration, songGenre, txtFileName.getText());
+            //songManager.createSong(newSong);
+
         }
     }
     private int calculateSeconds()

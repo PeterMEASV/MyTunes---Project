@@ -21,4 +21,8 @@ public class SongManager {
     public List<Song> getAllSongs() throws Exception {
         return songDAO_db.getAllSongs();
     }
+
+    public void createSong(Song song) throws Exception {
+        songDAO_db.CreateSong(song);
+    }
 }
