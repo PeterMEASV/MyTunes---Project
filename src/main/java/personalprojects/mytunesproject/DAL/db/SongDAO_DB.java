@@ -11,10 +11,14 @@ import java.util.List;
 public class SongDAO_DB implements ISongDataAccess {
 DBConnector db;
 
+public SongDAO_DB() throws IOException {
+    db =new DBConnector();
+}
+
     @Override
     public List<Song> getAllSongs() throws Exception {
         ArrayList<Song> allSongs = new ArrayList<>();
-        db =new DBConnector();
+
 
         try (Connection conn = db.getConnection();
              Statement stmt = conn.createStatement())
@@ -44,33 +48,29 @@ DBConnector db;
     @Override
     public Song CreateSong(Song newSong) throws Exception {
         String sql = "INSERT INTO dbo.Songs(Name, Artist, Duration, Category, FilePath) VALUES (?,?,?,?,?)";
-        Song song = newSong;
 
-        try (Connection conn = db.getConnection()){
+        try (Connection conn = db.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            stmt.setString(1, song.getName());
-            stmt.setString(2,song.getArtist());
-            stmt.setInt(3, song.getDuration());
-            stmt.setString(4, song.getCategory());
-            stmt.setString(5, song.getFilePath());
+            stmt.setString(1, newSong.getName());
+            stmt.setString(2, newSong.getArtist());
+            stmt.setInt(3, newSong.getDuration());
+            stmt.setString(4, newSong.getCategory());
+            stmt.setString(5, newSong.getFilePath());
 
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
             int SongID = 0;
 
-            if(rs.next()){
+            if (rs.next()) {
                 SongID = rs.getInt(1);
             }
 
-            Song createdSong = new Song(SongID, song.getName(), song.getArtist(), song.getDuration(), song.getCategory(), song.getFilePath());
-
-            return createdSong;
-        }
-        catch (SQLException ex){
+            return new Song(SongID, newSong.getName(), newSong.getArtist(), newSong.getDuration(), newSong.getCategory(), newSong.getFilePath());
+        } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new Exception("Could not create song",ex);
+            throw new Exception("Could not create song", ex);
         }
     }
 

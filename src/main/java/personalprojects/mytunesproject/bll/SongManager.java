@@ -5,6 +5,7 @@ import personalprojects.mytunesproject.DAL.ISongDataAccess;
 import personalprojects.mytunesproject.DAL.db.SongDAO_DB;
 import personalprojects.mytunesproject.BE.Song;
 
+import java.io.IOException;
 import java.util.List;
 
 public class SongManager {
@@ -13,7 +14,7 @@ public class SongManager {
     private ISongDataAccess songDAO_db;
 
 
-    public SongManager() {
+    public SongManager() throws IOException {
         songDAO_db = new SongDAO_DB();
 
     }
@@ -28,5 +29,7 @@ public class SongManager {
 
     public void deleteSong(Song selectedSong) throws Exception {
         songDAO_db.deleteSong(selectedSong);
+
+        // TODO: add a way to update the list on GUI. possibly with a method called UpdateSongs().
     }
 }

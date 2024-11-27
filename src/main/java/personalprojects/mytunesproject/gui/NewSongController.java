@@ -12,6 +12,7 @@ import personalprojects.mytunesproject.BE.Song;
 import personalprojects.mytunesproject.bll.SongManager;
 
 import java.io.File;
+import java.io.IOException;
 
 public class NewSongController {
     @FXML
@@ -29,6 +30,9 @@ public class NewSongController {
 
     // TODO: Husk at implementere flere typer, eller anden måde at modtage kategorier.
     private String[] testObjects = {"Pop", "Rock", "Rap", "Disco", "Jazz", "House"};
+
+    public NewSongController() throws IOException {
+    }
 
     public void initialize() {
         DropDownCategory.getItems().addAll(testObjects);
@@ -64,6 +68,7 @@ public class NewSongController {
             // TODO: Ændre Song objektet: Duration skal være int (sekunder), tilføj FilePath.
             Song newSong = new Song(1, txtSongTitle.getText(), txtSongArtist.getText(), songDuration, songGenre, txtFileName.getText());
             songManager.createSong(newSong);
+
 
         }
     }
