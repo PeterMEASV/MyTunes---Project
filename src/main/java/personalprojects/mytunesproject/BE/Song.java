@@ -7,6 +7,7 @@ public class Song {
     private String Artist;
     private String Duration;
     private String Category;
+    //private String FilePath;
 
 
 public Song(int songID, String Name, String Artist, String Duration, String Category) {
@@ -15,6 +16,7 @@ public Song(int songID, String Name, String Artist, String Duration, String Cate
     this.Artist = Artist;
     this.Duration = Duration;
     this.Category = Category;
+
 }
 
     public int getSongID() {return songID;}
