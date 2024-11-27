@@ -32,4 +32,9 @@ public class SongManager {
 
         // TODO: add a way to update the list on GUI. possibly with a method called UpdateSongs().
     }
+
+    public void updateSong(Song selectedSong) throws Exception {
+        songDAO_db.updateSong(selectedSong);
+    }
+
 }

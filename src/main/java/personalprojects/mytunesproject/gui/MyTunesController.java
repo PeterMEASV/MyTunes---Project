@@ -248,4 +248,9 @@ public class MyTunesController implements Initializable {
         });
     }
 
+    public void btnMute(ActionEvent actionEvent) {
+    }
+
+    public void sliderDuration(MouseEvent mouseEvent) {
+    }
 }

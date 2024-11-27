@@ -9,15 +9,15 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personalprojects.mytunesproject.gui.MyTunesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personalprojects.mytunesproject.gui.MyTunesController">
    <children>
-      <Button layoutX="40.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnLastSong" text="&lt;" />
-      <Button layoutX="93.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnPlay" text="=" />
-      <Button layoutX="145.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnNextSong" text="&gt;" />
-      <Button layoutX="730.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnSearch" text="Search" />
-      <TextField fx:id="txtSearch" layoutX="563.0" layoutY="27.0" />
-      <Label layoutX="525.0" layoutY="32.0" text="Filter:" />
-      <Label fx:id="txtCurrentlyPlaying" layoutX="281.0" layoutY="32.0" text="Music playing" />
+      <Button layoutX="291.0" layoutY="519.0" mnemonicParsing="false" onAction="#btnLastSong" prefHeight="42.0" prefWidth="45.0" text="&lt;" />
+      <Button layoutX="351.0" layoutY="519.0" mnemonicParsing="false" onAction="#btnPlay" prefHeight="42.0" prefWidth="45.0" text="=" />
+      <Button layoutX="408.0" layoutY="519.0" mnemonicParsing="false" onAction="#btnNextSong" prefHeight="42.0" prefWidth="45.0" text="&gt;" />
+      <Button layoutX="219.0" layoutY="28.0" mnemonicParsing="false" onAction="#btnSearch" text="Search" />
+      <TextField fx:id="txtSearch" layoutX="52.0" layoutY="28.0" />
+      <Label layoutX="14.0" layoutY="33.0" text="Filter:" />
+      <Label fx:id="txtCurrentlyPlaying" layoutX="15.0" layoutY="548.0" text="Music playing" />
       <TableView fx:id="lstPlayList" layoutX="14.0" layoutY="100.0" prefHeight="367.0" prefWidth="205.0">
         <columns>
           <TableColumn prefWidth="75.0" text="Name" />
@@ -48,6 +48,8 @@
       <Button layoutX="470.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnEditSong" text="Edit" />
       <Button layoutX="514.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnDeleteSong" text="Delete" />
       <Button layoutX="723.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnCloseProgram" text="Close" />
-      <Slider layoutX="35.0" layoutY="54.0" onDragDetected="#sliderVolume" />
+      <Slider layoutX="665.0" layoutY="519.0" onDragDetected="#sliderVolume" prefHeight="42.0" prefWidth="116.0" />
+      <Button layoutX="612.0" layoutY="519.0" mnemonicParsing="false" onAction="#btnMute" prefHeight="42.0" prefWidth="45.0" text="🔊" />
+      <Slider layoutX="124.0" layoutY="561.0" onDragDetected="#sliderDuration" prefHeight="42.0" prefWidth="500.0" />
    </children>
 </AnchorPane>

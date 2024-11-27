@@ -68,6 +68,9 @@ public class NewSongController {
             // TODO: Ændre Song objektet: Duration skal være int (sekunder), tilføj FilePath.
             Song newSong = new Song(1, txtSongTitle.getText(), txtSongArtist.getText(), songDuration, songGenre, txtFileName.getText());
             songManager.createSong(newSong);
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.close();
+
 
 
         }
