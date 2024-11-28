@@ -68,6 +68,7 @@ public class MyTunesController implements Initializable {
     private int currentSongIndex = -1;
     private ScheduledExecutorService executorService;
     private double volumeNumber = 50;
+    private boolean muteCheck = false;
 
     public MyTunesController() {
         try {
@@ -438,6 +439,15 @@ public class MyTunesController implements Initializable {
     }
 
     public void btnMute(ActionEvent actionEvent) {
+        if (muteCheck == false){
+            muteCheck = true;
+            mediaPlayer.setVolume(0);
+        } else if (muteCheck == true) {
+            mediaPlayer.setVolume(volumeNumber);
+            muteCheck = false;
+        }
+
+
     }
 
     public void sliderDuration(MouseEvent mouseEvent) {
