@@ -76,8 +76,7 @@ public class SongDAO_DB implements ISongDataAccess {
 
     @Override
     public void updateSong(Song song) {
-
-        String sql = "UPDATE dbo.Songs SET Name = ?, Artist = ?, Duration = ?, Category = ? WHERE SongID = ?";
+        String sql = "UPDATE dbo.Songs SET Name = ?, Artist = ?, Duration = ?, Category = ?, FilePath = ? WHERE SongID = ?";
 
         try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -86,14 +85,13 @@ public class SongDAO_DB implements ISongDataAccess {
             stmt.setString(2, song.getArtist());
             stmt.setInt(3, song.getDuration());
             stmt.setString(4, song.getCategory());
-            stmt.setInt(5, song.getSongID());
-
+            stmt.setString(5, song.getFilePath());
+            stmt.setInt(6, song.getSongID());
 
             stmt.executeUpdate();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-
         }
     }
 
