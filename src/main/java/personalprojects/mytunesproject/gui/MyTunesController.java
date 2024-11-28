@@ -87,6 +87,8 @@ public class MyTunesController implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+
         clnTitleSong.setCellValueFactory(new PropertyValueFactory<>("name"));
         clnArtistSong.setCellValueFactory(new PropertyValueFactory<>("artist"));
         clnCategorySong.setCellValueFactory(new PropertyValueFactory<>("category"));
@@ -366,10 +368,6 @@ public class MyTunesController implements Initializable {
         }
     }
 
-    public void sliderVolume(MouseEvent mouseEvent) {
-    }
-
-
     @FXML
     private void btnDeletePlaylist(ActionEvent actionEvent) {
         Playlist selectedPlaylist = lstPlayList.getSelectionModel().getSelectedItem();
@@ -424,8 +422,6 @@ public class MyTunesController implements Initializable {
                         throw new RuntimeException(e);
                     }
                 }
-
-
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle("Item Deleted");
                 successAlert.setContentText("The item has been deleted.");
@@ -446,8 +442,6 @@ public class MyTunesController implements Initializable {
             mediaPlayer.setVolume(volumeNumber);
             muteCheck = false;
         }
-
-
     }
 
     public void sliderDuration(MouseEvent mouseEvent) {
