@@ -224,6 +224,7 @@ public class MyTunesController implements Initializable {
     private void btnCloseProgram(ActionEvent actionEvent) {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
+        System.exit(0);
     }
 
     private void displayError(Exception e) {
