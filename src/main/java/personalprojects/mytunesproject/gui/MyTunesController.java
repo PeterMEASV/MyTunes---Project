@@ -183,7 +183,7 @@ public class MyTunesController implements Initializable {
 
     @FXML
     private void btnEditSong(ActionEvent actionEvent) throws IOException {
-        Song selectedSong = lstSongs.getSelectionModel().getSelectedItem(); // Get selected song from the list
+        Song selectedSong = lstSongs.getSelectionModel().getSelectedItem(); 
         if (selectedSong == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No Song Selected");

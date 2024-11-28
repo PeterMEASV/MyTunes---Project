@@ -30,13 +30,13 @@ public class NewSongController {
     private SongModel songModel = new SongModel();
     private MyTunesController parent;
 
-    private Song songToEdit = null; // Holds the song to edit (null for new song)
+    private Song songToEdit = null;
 
     private String[] testObjects = {"Pop", "Rock", "Rap", "Disco", "Jazz", "House"};
 
     public NewSongController() throws Exception {
     }
-    
+
     public void initialize(){
         DropDownCategory.getItems().addAll(testObjects);
     }
@@ -45,7 +45,7 @@ public class NewSongController {
         this.parent = parent;
     }
 
-    // This method is called to set the song for editing
+
     public void setSongForEdit(Song song) {
         this.songToEdit = song;
 
