@@ -127,8 +127,10 @@ public class MyTunesController implements Initializable {
                     sliderDuration.setValue(mediaPlayer.getCurrentTime().toSeconds());
                 });
             }
-        }, 0, 1200, TimeUnit.MILLISECONDS); // Update every 1200 ms
+        }, 0, 1200, TimeUnit.MILLISECONDS);
+        executorService.close();
     }
+
 
     @FXML
     private void btnMoveToPlaylist(ActionEvent actionEvent) {
