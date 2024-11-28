@@ -100,6 +100,7 @@ public class MyTunesController implements Initializable {
             }
         });
 
+        // Duration slider setup
         sliderDuration.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (mediaPlayer != null && !sliderDuration.isValueChanging()) {
                 mediaPlayer.seek(javafx.util.Duration.seconds(newValue.doubleValue()));
@@ -235,7 +236,7 @@ public class MyTunesController implements Initializable {
                     isPlaying = false;
                     txtCurrentlyPlaying.setText("Paused");
                 } else {
-                    mediaPlayer.seek(Duration.seconds(currentTime));
+                    mediaPlayer.seek(javafx.util.Duration.seconds(sliderDuration.getValue())); // Seek to the current slider position
                     mediaPlayer.play();
                     isPlaying = true;
                     txtCurrentlyPlaying.setText("Now Playing: " + lstSongs.getItems().get(currentSongIndex).getName());
@@ -287,7 +288,6 @@ public class MyTunesController implements Initializable {
             double duration = mediaPlayer.getTotalDuration().toSeconds();
             sliderDuration.setMax(duration);
             sliderDuration.setValue(0);
-
             mediaPlayer.play();
             isPlaying = true;
             currentTime = 0;
@@ -432,5 +432,8 @@ public class MyTunesController implements Initializable {
     }
 
     public void sliderDuration(MouseEvent mouseEvent) {
+        if (mediaPlayer != null && !sliderDuration.isValueChanging()) {
+            mediaPlayer.seek(javafx.util.Duration.seconds(sliderDuration.getValue()));
+        }
     }
 }
