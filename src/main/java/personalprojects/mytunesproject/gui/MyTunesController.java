@@ -67,6 +67,7 @@ public class MyTunesController implements Initializable {
     private double currentTime = 0;
     private int currentSongIndex = -1;
     private ScheduledExecutorService executorService;
+    private double volumeNumber;
 
     public MyTunesController() {
         try {
@@ -101,7 +102,8 @@ public class MyTunesController implements Initializable {
         sliderVolume.setValue(50);
         sliderVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (mediaPlayer != null) {
-                mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
+                volumeNumber = newValue.doubleValue() / 100.0;
+                mediaPlayer.setVolume(volumeNumber);
             }
         });
 
@@ -294,6 +296,7 @@ public class MyTunesController implements Initializable {
             sliderDuration.setMax(duration);
             sliderDuration.setValue(0);
             mediaPlayer.play();
+            mediaPlayer.setVolume(volumeNumber);
             isPlaying = true;
             currentTime = 0;
         });
