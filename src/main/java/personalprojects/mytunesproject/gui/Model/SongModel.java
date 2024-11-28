@@ -61,7 +61,6 @@ public class SongModel {
     public void updateSong(Song selectedSong) throws Exception {
 
 
-        // Proceed to update the song
         songManager.updateSong(selectedSong);
 
         boolean found = false;

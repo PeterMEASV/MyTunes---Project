@@ -82,19 +82,18 @@ public class SongDAO_DB implements ISongDataAccess {
         try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Set parameters using the 'song' object, which is the one you're updating
             stmt.setString(1, song.getName());
             stmt.setString(2, song.getArtist());
             stmt.setInt(3, song.getDuration());
             stmt.setString(4, song.getCategory());
-            stmt.setInt(5, song.getSongID());  // Assuming SongID is an integer field
+            stmt.setInt(5, song.getSongID());
 
-            // Execute the update
+
             stmt.executeUpdate();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-            // Handle exception appropriately
+
         }
     }
 
