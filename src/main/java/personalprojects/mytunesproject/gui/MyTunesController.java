@@ -67,7 +67,7 @@ public class MyTunesController implements Initializable {
     private double currentTime = 0;
     private int currentSongIndex = -1;
     private ScheduledExecutorService executorService;
-    private double volumeNumber;
+    private double volumeNumber = 50;
 
     public MyTunesController() {
         try {
@@ -114,7 +114,7 @@ public class MyTunesController implements Initializable {
                     sliderDuration.setValue(mediaPlayer.getCurrentTime().toSeconds());
                 });
             }
-        }, 0, 400, TimeUnit.MILLISECONDS); // Update every 100 ms
+        }, 0, 1200, TimeUnit.MILLISECONDS); // Update every 100 ms
     }
 
     @FXML
@@ -224,6 +224,7 @@ public class MyTunesController implements Initializable {
     private void btnCloseProgram(ActionEvent actionEvent) {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
+        System.exit(0);
     }
 
     private void displayError(Exception e) {
@@ -236,21 +237,21 @@ public class MyTunesController implements Initializable {
 
     public void btnPlay(ActionEvent actionEvent) {
         try {
-            if (mediaPlayer != null) {
-                if (isPlaying) {
-                    currentTime = mediaPlayer.getCurrentTime().toSeconds();
-                    mediaPlayer.pause();
-                    isPlaying = false;
-                    txtCurrentlyPlaying.setText("Paused");
-                } else {
-                    mediaPlayer.seek(javafx.util.Duration.seconds(sliderDuration.getValue())); // Seek to the current slider position
-                    mediaPlayer.play();
-                    isPlaying = true;
-                    txtCurrentlyPlaying.setText("Now Playing: " + lstSongs.getItems().get(currentSongIndex).getName());
-                }
-            } else {
-                Song selectedSong = lstSongs.getSelectionModel().getSelectedItem();
+            // Check if the user has selected a new song
+            Song selectedSong = lstSongs.getSelectionModel().getSelectedItem();
+
+            // If a song is currently playing and the user has selected a new song
+            if (mediaPlayer != null && isPlaying && selectedSong != null && !selectedSong.equals(lstSongs.getItems().get(currentSongIndex))) {
+                // Stop the current song
+                mediaPlayer.stop();
+                isPlaying = false;
+                currentTime = 0; // Reset the current time
+            }
+
+            // If the media player is not initialized or not playing, we either play the selected song or resume the current one
+            if (mediaPlayer == null || !isPlaying) {
                 if (selectedSong == null) {
+                    // If no song is selected, try to get the current song from the index
                     if (currentSongIndex >= 0 && currentSongIndex < lstSongs.getItems().size()) {
                         selectedSong = lstSongs.getItems().get(currentSongIndex);
                     } else {
@@ -260,13 +261,18 @@ public class MyTunesController implements Initializable {
                     }
                 }
                 playNewSong(selectedSong);
+            } else {
+                // If the media player is playing, toggle play/pause
+                mediaPlayer.seek(javafx.util.Duration.seconds(sliderDuration.getValue())); // Seek to the current slider position
+                mediaPlayer.play();
+                isPlaying = true;
+                txtCurrentlyPlaying.setText("Now Playing: " + lstSongs.getItems().get(currentSongIndex).getName());
             }
         } catch (Exception e) {
             Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing the song: " + e.getMessage());
             errorAlert.showAndWait();
         }
     }
-
     private void playNewSong(Song song) throws IOException {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -444,4 +450,6 @@ public class MyTunesController implements Initializable {
             mediaPlayer.seek(javafx.util.Duration.seconds(sliderDuration.getValue()));
         }
     }
+
+
 }
