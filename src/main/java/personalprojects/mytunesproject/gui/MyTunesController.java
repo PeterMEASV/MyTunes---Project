@@ -53,13 +53,13 @@ public class MyTunesController implements Initializable {
     private TableColumn clnCategorySong;
     @FXML
     private TableColumn clnTimeSong;
+    @FXML
+    private Slider sliderVolume;
 
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
     private double currentTime = 0;
     private int currentSongIndex = -1;
-    @FXML
-    private Slider sliderVolume;
 
     public MyTunesController() {
         try {
@@ -73,12 +73,20 @@ public class MyTunesController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        lstSongs.setItems(songModel.getObservableSongs());
+        try {
+            lstSongs.setItems(songModel.getObservableSongs());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         clnTitleSong.setCellValueFactory(new PropertyValueFactory<>("name"));
         clnArtistSong.setCellValueFactory(new PropertyValueFactory<>("artist"));
         clnCategorySong.setCellValueFactory(new PropertyValueFactory<>("category"));
         clnTimeSong.setCellValueFactory(new PropertyValueFactory<>("duration"));
-        lstPlaylistSongs.setItems(songModel.getObservableSongs());
+        try {
+            lstPlaylistSongs.setItems(songModel.getObservableSongs());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         lstPlayList.setItems(playlistModel.getObservablePlaylists());
 
@@ -381,6 +389,10 @@ public class MyTunesController implements Initializable {
                 successAlert.showAndWait();
             }
         });
+    }
+    public void UpdateSongs() throws Exception {
+        lstSongs.setItems(songModel.getObservableSongs());
+        System.out.println(songModel.getObservableSongs().size());
     }
 
     public void btnMute(ActionEvent actionEvent) {

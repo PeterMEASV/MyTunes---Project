@@ -4,7 +4,7 @@ package personalprojects.mytunesproject.gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-// project
+//project
 import personalprojects.mytunesproject.BE.Song;
 import personalprojects.mytunesproject.bll.SongManager;
 
@@ -16,6 +16,7 @@ public class SongModel {
     private ObservableList<Song> filteredSongs;
     private SongManager songManager;
 
+
     public SongModel() throws Exception {
         songManager = new SongManager();
         lstSongs = FXCollections.observableArrayList();
@@ -23,15 +24,15 @@ public class SongModel {
         filteredSongs = FXCollections.observableArrayList(lstSongs);
     }
 
-
-    public ObservableList<Song> getObservableSongs() {
+    public ObservableList<Song> getObservableSongs() throws Exception {
+        update();
         return filteredSongs;
+
     }
 
 
     public void searchSongs(String query) {
         filteredSongs.clear();
-
         if (query == null || query.trim().isEmpty()) {
             filteredSongs.addAll(lstSongs);
             return;
@@ -51,4 +52,15 @@ public class SongModel {
         lstSongs.remove(selectedSong);
         filteredSongs.remove(selectedSong);
     }
+
+    public void createSong(Song selectedSong) throws Exception {
+        songManager.createSong(selectedSong);
+        lstSongs.add(selectedSong);
+    }
+    public void update() throws Exception {
+        filteredSongs.clear();
+        filteredSongs.addAll(songManager.getAllSongs());
+    }
 }
+
+

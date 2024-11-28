@@ -10,6 +10,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import personalprojects.mytunesproject.BE.Song;
 import personalprojects.mytunesproject.bll.SongManager;
+import personalprojects.mytunesproject.gui.Model.SongModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,21 +26,23 @@ public class NewSongController {
     private TextField txtFileName;
     @FXML
     private ChoiceBox<String> DropDownCategory;
-    SongManager songManager = new SongManager();
-
-
+    SongModel songModel = new SongModel();
+    MyTunesController parent;
     // TODO: Husk at implementere flere typer, eller anden måde at modtage kategorier.
     private String[] testObjects = {"Pop", "Rock", "Rap", "Disco", "Jazz", "House"};
 
-    public NewSongController() throws IOException {
+
+    public void setParent(MyTunesController parent)
+    {
+        this.parent = parent;
+    }
+
+
+    public NewSongController() throws Exception {
     }
 
     public void initialize() {
         DropDownCategory.getItems().addAll(testObjects);
-    }
-
-    public void setParent(MyTunesController myTunesController) {
-
     }
     @FXML
     private void btnMore(ActionEvent actionEvent) {
@@ -67,10 +70,11 @@ public class NewSongController {
             String songGenre = DropDownCategory.getValue();
             // TODO: Ændre Song objektet: Duration skal være int (sekunder), tilføj FilePath.
             Song newSong = new Song(1, txtSongTitle.getText(), txtSongArtist.getText(), songDuration, songGenre, txtFileName.getText());
-            songManager.createSong(newSong);
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.close();
+            songModel.createSong(newSong);
 
+            if(parent != null) {
+                parent.UpdateSongs();
+            }
 
 
         }
