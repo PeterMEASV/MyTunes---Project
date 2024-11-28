@@ -12,10 +12,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
+
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 
 // import Project
 import personalprojects.mytunesproject.BE.Song;
@@ -45,6 +51,8 @@ public class MyTunesController implements Initializable {
     private TableColumn clnCategorySong;
     @FXML
     private TableColumn clnTimeSong;
+
+    private MediaPlayer mediaPlayer;
 
     public MyTunesController() {
         try {
@@ -175,6 +183,41 @@ public class MyTunesController implements Initializable {
     }
 
     public void btnPlay(ActionEvent actionEvent) {
+        Song selectedSong = lstSongs.getSelectionModel().getSelectedItem();
+        if (selectedSong == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a song to play.");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+
+            String filePath = selectedSong.getFilePath();
+            File file = new File(filePath);
+
+            if (!file.exists()) {
+                throw new IOException("File not found: " + filePath);
+            }
+
+            Media media = new Media(file.toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+
+            mediaPlayer.setOnEndOfMedia(() -> {
+                txtCurrentlyPlaying.setText("Playback finished: " + selectedSong.getName());
+            });
+
+            mediaPlayer.play();
+
+
+            txtCurrentlyPlaying.setText("Now Playing: " + selectedSong.getName() + " by " + selectedSong.getArtist());
+        } catch (Exception e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing song: " + e.getMessage());
+            errorAlert.showAndWait();
+        }
+
     }
 
     public void btnNextSong(ActionEvent actionEvent) {
