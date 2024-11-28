@@ -39,4 +39,9 @@ public Song(int songID, String Name, String Artist, int Duration, String Categor
     public String getFilePath() {return filePath;}
     public void setFilePath(String filePath) {this.filePath = filePath;}
 
+    public String getFormattedTime(){
+    int minutes = this.Duration / 60;
+    int seconds = this.Duration % 60;
+    return String.format("%02d:%02d", minutes, seconds);
+    }
 }

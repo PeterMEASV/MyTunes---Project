@@ -1,6 +1,8 @@
 package personalprojects.mytunesproject.gui;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -50,17 +53,19 @@ public class MyTunesController implements Initializable {
     private SongModel songModel;
     private PlaylistModel playlistModel;
     @FXML
-    private TableColumn clnTitleSong;
+    private TableColumn<Song, String> clnTitleSong;
     @FXML
-    private TableColumn clnArtistSong;
+    private TableColumn<Song, String> clnArtistSong;
     @FXML
-    private TableColumn clnCategorySong;
+    private TableColumn<Song, String> clnCategorySong;
     @FXML
-    private TableColumn clnTimeSong;
+    private TableColumn<Song, String> clnTimeSong;
     @FXML
     private Slider sliderVolume;
     @FXML
     private Slider sliderDuration;
+    @FXML
+    private Label volumeProcent;
 
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
@@ -69,6 +74,7 @@ public class MyTunesController implements Initializable {
     private ScheduledExecutorService executorService;
     private double volumeNumber = 50;
     private boolean muteCheck = false;
+
 
     public MyTunesController() {
         try {
@@ -88,11 +94,13 @@ public class MyTunesController implements Initializable {
             throw new RuntimeException(e);
         }
 
-
         clnTitleSong.setCellValueFactory(new PropertyValueFactory<>("name"));
         clnArtistSong.setCellValueFactory(new PropertyValueFactory<>("artist"));
         clnCategorySong.setCellValueFactory(new PropertyValueFactory<>("category"));
-        clnTimeSong.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        clnTimeSong.setCellValueFactory(cellData -> {Song song = cellData.getValue();
+            return new SimpleStringProperty(song.getFormattedTime());
+        });
+
         try {
             lstPlaylistSongs.setItems(songModel.getObservableSongs());
         } catch (Exception e) {
@@ -106,6 +114,8 @@ public class MyTunesController implements Initializable {
         sliderVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (mediaPlayer != null) {
                 volumeNumber = newValue.doubleValue() / 100.0;
+                DecimalFormat format = new DecimalFormat("#");
+                volumeProcent.setText(format.format((volumeNumber*100)) + "%");
                 mediaPlayer.setVolume(volumeNumber);
             }
         });
@@ -117,7 +127,7 @@ public class MyTunesController implements Initializable {
                     sliderDuration.setValue(mediaPlayer.getCurrentTime().toSeconds());
                 });
             }
-        }, 0, 1200, TimeUnit.MILLISECONDS); // Update every 100 ms
+        }, 0, 1200, TimeUnit.MILLISECONDS); // Update every 1200 ms
     }
 
     @FXML
