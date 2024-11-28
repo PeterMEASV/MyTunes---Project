@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SongDAO_DB implements ISongDataAccess {
-DBConnector db;
+    DBConnector db;
 
-public SongDAO_DB() throws IOException {
-    db =new DBConnector();
-}
+    public SongDAO_DB() throws IOException {
+        db =new DBConnector();
+    }
 
     @Override
     public List<Song> getAllSongs() throws Exception {
@@ -76,6 +76,26 @@ public SongDAO_DB() throws IOException {
 
     @Override
     public void updateSong(Song song) {
+
+        String sql = "UPDATE dbo.Songs SET Name = ?, Artist = ?, Duration = ?, Category = ? WHERE SongID = ?";
+
+        try (Connection conn = db.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set parameters using the 'song' object, which is the one you're updating
+            stmt.setString(1, song.getName());
+            stmt.setString(2, song.getArtist());
+            stmt.setInt(3, song.getDuration());
+            stmt.setString(4, song.getCategory());
+            stmt.setInt(5, song.getSongID());  // Assuming SongID is an integer field
+
+            // Execute the update
+            stmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            // Handle exception appropriately
+        }
     }
 
     @Override
@@ -94,3 +114,8 @@ public SongDAO_DB() throws IOException {
         }
     }
 }
+
+
+
+
+

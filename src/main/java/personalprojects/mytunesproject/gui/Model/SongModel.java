@@ -57,6 +57,32 @@ public class SongModel {
         songManager.createSong(selectedSong);
         lstSongs.add(selectedSong);
     }
+
+    public void updateSong(Song selectedSong) throws Exception {
+
+
+        // Proceed to update the song
+        songManager.updateSong(selectedSong);
+
+        boolean found = false;
+        for (int i = 0; i < lstSongs.size(); i++) {
+            Song s = lstSongs.get(i);
+            if (s.getSongID() == selectedSong.getSongID()) {
+                s.setName(selectedSong.getName());
+                s.setArtist(selectedSong.getArtist());
+                s.setCategory(selectedSong.getCategory());
+                s.setDuration(selectedSong.getDuration());
+                s.setFilePath(selectedSong.getFilePath());
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            throw new Exception("Song with ID " + selectedSong.getSongID() + " not found in the list.");
+        }
+    }
+
     public void update() throws Exception {
         filteredSongs.clear();
         filteredSongs.addAll(songManager.getAllSongs());

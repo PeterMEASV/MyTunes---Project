@@ -165,13 +165,26 @@ public class MyTunesController implements Initializable {
         NewSongController controller = loader.getController();
         controller.setParent(this);
 
-        stage.setTitle("New/Edit Songs");
+        // No song passed for new song
+        controller.setSongForEdit(null);
+
+        stage.setTitle("New Song");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
 
     @FXML
     private void btnEditSong(ActionEvent actionEvent) throws IOException {
+        Song selectedSong = lstSongs.getSelectionModel().getSelectedItem(); // Get selected song from the list
+        if (selectedSong == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Song Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a song to edit.");
+            alert.showAndWait();
+            return;
+        }
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Songs.fxml"));
         Parent scene = loader.load();
@@ -182,7 +195,10 @@ public class MyTunesController implements Initializable {
         NewSongController controller = loader.getController();
         controller.setParent(this);
 
-        stage.setTitle("New/Edit Songs");
+        // Pass the selected song to the controller for editing
+        controller.setSongForEdit(selectedSong);
+
+        stage.setTitle("Edit Song");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
