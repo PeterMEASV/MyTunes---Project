@@ -306,7 +306,7 @@ public class MyTunesController implements Initializable {
 
             txtSearch.clear();
             songModel.searchSongs("");
-            searchButton.setText("Filter");
+            searchButton.setText("Search");
         } else {
             if (!query.isEmpty()) {
                 songModel.searchSongs(query);
