@@ -66,6 +66,8 @@ public class MyTunesController implements Initializable {
         lstPlaylistSongs.setItems(songModel.getObservableSongs());
 
         lstPlayList.setItems(playlistModel.getObservablePlaylists());
+
+
     }
 
     @FXML
@@ -178,7 +180,22 @@ public class MyTunesController implements Initializable {
     public void btnNextSong(ActionEvent actionEvent) {
     }
 
+    @FXML
     public void btnSearch(ActionEvent actionEvent) {
+        String query = txtSearch.getText().trim().toLowerCase();
+        Button searchButton = (Button) actionEvent.getSource();
+
+        if (searchButton.getText().equals("Clear")) {
+
+            txtSearch.clear();
+            songModel.searchSongs("");
+            searchButton.setText("Filter");
+        } else {
+            if (!query.isEmpty()) {
+                songModel.searchSongs(query);
+                searchButton.setText("Clear");
+            }
+        }
     }
 
     public void sliderVolume(MouseEvent mouseEvent) {
