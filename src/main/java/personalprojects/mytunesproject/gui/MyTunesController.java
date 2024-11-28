@@ -1,5 +1,6 @@
 package personalprojects.mytunesproject.gui;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +19,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import javafx.scene.media.Media;
@@ -62,6 +66,7 @@ public class MyTunesController implements Initializable {
     private boolean isPlaying = false;
     private double currentTime = 0;
     private int currentSongIndex = -1;
+    private ScheduledExecutorService executorService;
 
     public MyTunesController() {
         try {
@@ -100,12 +105,14 @@ public class MyTunesController implements Initializable {
             }
         });
 
-        // Duration slider setup
-        sliderDuration.valueProperty().addListener((observable, oldValue, newValue) -> {
+        executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(() -> {
             if (mediaPlayer != null && !sliderDuration.isValueChanging()) {
-                mediaPlayer.seek(javafx.util.Duration.seconds(newValue.doubleValue()));
+                Platform.runLater(() -> {
+                    sliderDuration.setValue(mediaPlayer.getCurrentTime().toSeconds());
+                });
             }
-        });
+        }, 0, 400, TimeUnit.MILLISECONDS); // Update every 100 ms
     }
 
     @FXML
