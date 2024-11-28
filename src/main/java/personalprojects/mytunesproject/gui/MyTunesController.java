@@ -1,5 +1,6 @@
 package personalprojects.mytunesproject.gui;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +25,7 @@ import javafx.scene.media.MediaPlayer;
 
 
 // import Project
+import javafx.util.Duration;
 import personalprojects.mytunesproject.BE.Song;
 import personalprojects.mytunesproject.BE.Playlist;
 import personalprojects.mytunesproject.gui.Model.PlaylistModel;
@@ -53,6 +55,11 @@ public class MyTunesController implements Initializable {
     private TableColumn clnTimeSong;
 
     private MediaPlayer mediaPlayer;
+    private boolean isPlaying = false;
+    private double currentTime = 0;
+    private int currentSongIndex = -1;
+    @FXML
+    private Slider sliderVolume;
 
     public MyTunesController() {
         try {
@@ -75,7 +82,13 @@ public class MyTunesController implements Initializable {
 
         lstPlayList.setItems(playlistModel.getObservablePlaylists());
 
-
+        // Volume slider setup
+        sliderVolume.setValue(50);
+        sliderVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (mediaPlayer != null) {
+                mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
+            }
+        });
     }
 
     @FXML
@@ -179,48 +192,109 @@ public class MyTunesController implements Initializable {
         alert.showAndWait();
     }
 
-    public void btnLastSong(ActionEvent actionEvent) {
-    }
+
 
     public void btnPlay(ActionEvent actionEvent) {
-        Song selectedSong = lstSongs.getSelectionModel().getSelectedItem();
-        if (selectedSong == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a song to play.");
-            alert.showAndWait();
-            return;
-        }
-
         try {
             if (mediaPlayer != null) {
-                mediaPlayer.stop();
+                if (isPlaying) {
+                    currentTime = mediaPlayer.getCurrentTime().toSeconds();
+                    mediaPlayer.pause();
+                    isPlaying = false;
+                    txtCurrentlyPlaying.setText("Paused");
+                } else {
+                    mediaPlayer.seek(Duration.seconds(currentTime));
+                    mediaPlayer.play();
+                    isPlaying = true;
+                    txtCurrentlyPlaying.setText("Now Playing: " + lstSongs.getItems().get(currentSongIndex).getName());
+                }
+            } else {
+                Song selectedSong = lstSongs.getSelectionModel().getSelectedItem();
+                if (selectedSong == null) {
+                    if (currentSongIndex >= 0 && currentSongIndex < lstSongs.getItems().size()) {
+                        selectedSong = lstSongs.getItems().get(currentSongIndex);
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a song to play.");
+                        alert.showAndWait();
+                        return;
+                    }
+                }
+                playNewSong(selectedSong);
             }
-
-            String filePath = selectedSong.getFilePath();
-            File file = new File(filePath);
-
-            if (!file.exists()) {
-                throw new IOException("File not found: " + filePath);
-            }
-
-            Media media = new Media(file.toURI().toString());
-            mediaPlayer = new MediaPlayer(media);
-
-            mediaPlayer.setOnEndOfMedia(() -> {
-                txtCurrentlyPlaying.setText("Playback finished: " + selectedSong.getName());
-            });
-
-            mediaPlayer.play();
-
-
-            txtCurrentlyPlaying.setText("Now Playing: " + selectedSong.getName() + " by " + selectedSong.getArtist());
         } catch (Exception e) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing song: " + e.getMessage());
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing the song: " + e.getMessage());
             errorAlert.showAndWait();
         }
+    }
 
+    private void playNewSong(Song song) throws IOException {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+
+        String filePath = song.getFilePath();
+        File file = new File(filePath);
+
+        if (!file.exists()) {
+            throw new IOException("File not found: " + filePath);
+        }
+
+        Media media = new Media(file.toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
+        isPlaying = true;
+        currentTime = 0;
+
+        currentSongIndex = lstSongs.getItems().indexOf(song);
+
+        txtCurrentlyPlaying.setText("Now Playing: " + song.getName() + " by " + song.getArtist());
+
+        mediaPlayer.setOnEndOfMedia(() -> {
+            isPlaying = false;
+            currentTime = 0;
+
+            btnNextSong(null);
+        });
     }
 
     public void btnNextSong(ActionEvent actionEvent) {
+        ObservableList<Song> songs = lstSongs.getItems();
+
+        if (songs.isEmpty()) {
+            txtCurrentlyPlaying.setText("No songs in the playlist.");
+            return;
+        }
+
+        // Move to the next song
+        currentSongIndex = (currentSongIndex + 1) % songs.size();
+        Song nextSong = songs.get(currentSongIndex);
+
+        try {
+            playNewSong(nextSong);
+        } catch (Exception e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing the next song: " + e.getMessage());
+            errorAlert.showAndWait();
+        }
+    }
+
+    public void btnLastSong(ActionEvent actionEvent) {
+        ObservableList<Song> songs = lstSongs.getItems();
+
+        if (songs.isEmpty()) {
+            txtCurrentlyPlaying.setText("No songs in the playlist.");
+            return;
+        }
+
+        // Move to the next song
+        currentSongIndex = (currentSongIndex - 1) % songs.size();
+        Song nextSong = songs.get(currentSongIndex);
+
+        try {
+            playNewSong(nextSong);
+        } catch (Exception e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing the next song: " + e.getMessage());
+            errorAlert.showAndWait();
+        }
     }
 
     @FXML
@@ -243,6 +317,7 @@ public class MyTunesController implements Initializable {
 
     public void sliderVolume(MouseEvent mouseEvent) {
     }
+
 
     @FXML
     private void btnDeletePlaylist(ActionEvent actionEvent) {
