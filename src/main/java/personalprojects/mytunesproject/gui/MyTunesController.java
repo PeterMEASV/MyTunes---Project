@@ -55,6 +55,8 @@ public class MyTunesController implements Initializable {
     private TableColumn clnTimeSong;
     @FXML
     private Slider sliderVolume;
+    @FXML
+    private Slider sliderDuration;
 
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
@@ -95,6 +97,12 @@ public class MyTunesController implements Initializable {
         sliderVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (mediaPlayer != null) {
                 mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
+            }
+        });
+
+        sliderDuration.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (mediaPlayer != null && !sliderDuration.isValueChanging()) {
+                mediaPlayer.seek(javafx.util.Duration.seconds(newValue.doubleValue()));
             }
         });
     }
@@ -249,19 +257,30 @@ public class MyTunesController implements Initializable {
 
         Media media = new Media(file.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
-        isPlaying = true;
-        currentTime = 0;
 
         currentSongIndex = lstSongs.getItems().indexOf(song);
-
         txtCurrentlyPlaying.setText("Now Playing: " + song.getName() + " by " + song.getArtist());
 
         mediaPlayer.setOnEndOfMedia(() -> {
             isPlaying = false;
             currentTime = 0;
-
             btnNextSong(null);
+        });
+
+        mediaPlayer.setOnReady(() -> {
+            double duration = mediaPlayer.getTotalDuration().toSeconds();
+            sliderDuration.setMax(duration);
+            sliderDuration.setValue(0);
+
+            mediaPlayer.play();
+            isPlaying = true;
+            currentTime = 0;
+        });
+
+        mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+            if (!sliderDuration.isValueChanging()) {
+                sliderDuration.setValue(newValue.toSeconds());
+            }
         });
     }
 
@@ -273,7 +292,6 @@ public class MyTunesController implements Initializable {
             return;
         }
 
-        // Move to the next song
         currentSongIndex = (currentSongIndex + 1) % songs.size();
         Song nextSong = songs.get(currentSongIndex);
 
@@ -293,7 +311,6 @@ public class MyTunesController implements Initializable {
             return;
         }
 
-        // Move to the next song
         currentSongIndex = (currentSongIndex - 1) % songs.size();
         Song nextSong = songs.get(currentSongIndex);
 
