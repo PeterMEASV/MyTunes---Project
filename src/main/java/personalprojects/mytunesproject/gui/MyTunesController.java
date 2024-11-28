@@ -67,7 +67,7 @@ public class MyTunesController implements Initializable {
     private double currentTime = 0;
     private int currentSongIndex = -1;
     private ScheduledExecutorService executorService;
-    private double volumeNumber;
+    private double volumeNumber = 50;
 
     public MyTunesController() {
         try {
@@ -114,7 +114,7 @@ public class MyTunesController implements Initializable {
                     sliderDuration.setValue(mediaPlayer.getCurrentTime().toSeconds());
                 });
             }
-        }, 0, 400, TimeUnit.MILLISECONDS); // Update every 100 ms
+        }, 0, 1200, TimeUnit.MILLISECONDS); // Update every 100 ms
     }
 
     @FXML
