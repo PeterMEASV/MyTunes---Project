@@ -173,7 +173,6 @@ public class MyTunesController implements Initializable {
         NewSongController controller = loader.getController();
         controller.setParent(this);
 
-        // No song passed for new song
         controller.setSongForEdit(null);
 
         stage.setTitle("New Song");
@@ -203,7 +202,6 @@ public class MyTunesController implements Initializable {
         NewSongController controller = loader.getController();
         controller.setParent(this);
 
-        // Pass the selected song to the controller for editing
         controller.setSongForEdit(selectedSong);
 
         stage.setTitle("Edit Song");

@@ -50,7 +50,6 @@ public class NewSongController {
         this.songToEdit = song;
 
         if (songToEdit != null) {
-            // Pre-fill fields with song data for editing
             txtSongTitle.setText(songToEdit.getName());
             txtSongArtist.setText(songToEdit.getArtist());
             txtTimer.setText(formatDuration(songToEdit.getDuration()));
@@ -83,11 +82,9 @@ public class NewSongController {
             String songGenre = DropDownCategory.getValue();
 
             if (songToEdit == null) {
-                // Creating a new song
                 Song newSong = new Song(1, txtSongTitle.getText(), txtSongArtist.getText(), songDuration, songGenre, txtFileName.getText());
                 songModel.createSong(newSong);
             } else {
-                // Editing an existing song
                 songToEdit.setName(txtSongTitle.getText());
                 songToEdit.setArtist(txtSongArtist.getText());
                 songToEdit.setDuration(songDuration);
