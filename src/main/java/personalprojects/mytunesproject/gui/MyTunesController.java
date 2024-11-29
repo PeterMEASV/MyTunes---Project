@@ -167,7 +167,7 @@ public class MyTunesController implements Initializable {
     private void btnMoveToPlaylist(ActionEvent actionEvent) {
     }
 
-    public void addNewPlaylist(String playlistName) {
+    public void addNewPlaylist(String playlistName) throws Exception {
         Playlist newPlaylist = new Playlist(playlistName, 0, "00:00");
 
         playlistModel.getObservablePlaylists().add(newPlaylist);

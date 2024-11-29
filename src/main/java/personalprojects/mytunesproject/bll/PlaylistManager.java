@@ -4,13 +4,14 @@ import personalprojects.mytunesproject.DAL.IPlaylistDataAccess;
 import personalprojects.mytunesproject.DAL.db.PlaylistDAO_DB;
 import personalprojects.mytunesproject.BE.Playlist;
 
+import java.io.IOException;
 import java.util.List;
 
 public class PlaylistManager {
 
     private IPlaylistDataAccess playlistDAO_db;
 
-    public PlaylistManager() {
+    public PlaylistManager() throws IOException {
         playlistDAO_db = new PlaylistDAO_DB(); // Use the database implementation
     }
 

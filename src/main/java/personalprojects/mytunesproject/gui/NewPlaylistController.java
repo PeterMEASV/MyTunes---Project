@@ -19,7 +19,7 @@ public class NewPlaylistController {
     }
 
     @FXML
-    private void btnSavePlaylist(ActionEvent actionEvent) {
+    private void btnSavePlaylist(ActionEvent actionEvent) throws Exception {
         String playlistName = txtPlaylistName.getText();
         if (parentController != null && !playlistName.isEmpty()) {
             parentController.addNewPlaylist(playlistName);
