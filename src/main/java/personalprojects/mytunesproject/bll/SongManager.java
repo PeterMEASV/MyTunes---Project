@@ -47,5 +47,8 @@ public class SongManager {
     public void addSongToPlaylist(Playlist playlist, Song song) throws Exception {
         playlistSongsDAO_DB.addSongToPlaylist(playlist, song);
     }
+    public void deleteSongFromPlaylist(Playlist playlist, Song song) throws Exception {
+        playlistSongsDAO_DB.deleteSongFromPlaylist(playlist, song);
+    }
 
 }

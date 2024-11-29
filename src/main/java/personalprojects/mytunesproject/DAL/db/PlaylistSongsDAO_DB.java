@@ -65,4 +65,17 @@ public class PlaylistSongsDAO_DB {
             throw new RuntimeException(ex);
         }
     }
+
+    public void deleteSongFromPlaylist(Playlist playlist, Song song) throws SQLException {
+        String sql = "DELETE FROM dbo.Connection WHERE PlaylistID = ? AND SongID = ?";
+        try (Connection conn = db.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, playlist.getPlaylistID());
+                stmt.setInt(2, song.getSongID());
+                stmt.executeUpdate();
+        }
+        catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

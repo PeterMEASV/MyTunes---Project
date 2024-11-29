@@ -35,7 +35,4 @@ public class PlaylistModel {
         playlistManager.deletePlaylist(selectedPlaylist);
         lstPlayList.remove(selectedPlaylist);
     }
-
-    public void removeSongFromPlaylist(Song selectedSong) {
-    }
 }

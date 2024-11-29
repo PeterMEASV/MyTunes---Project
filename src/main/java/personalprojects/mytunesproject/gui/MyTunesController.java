@@ -174,12 +174,7 @@ public class MyTunesController implements Initializable {
     @FXML
     private void btnMoveToPlaylist(ActionEvent actionEvent) throws Exception {
         songModel.addSongToPlaylist(lstPlayList.getSelectionModel().getSelectedItem(), lstSongs.getSelectionModel().getSelectedItem());
-        Playlist selectedPlaylist = lstPlayList.getSelectionModel().getSelectedItem();
-        ObservableList<Song> songsOnPlaylist = songModel.getSongsOnPlaylist(selectedPlaylist);
-        lstPlaylistSongs.getItems().clear();
-        for (Song song : songsOnPlaylist) {
-            lstPlaylistSongs.getItems().add(song.getName());
-        }
+        playlistUpdate();
     }
 
     public void addNewPlaylist(String playlistName) throws Exception {
@@ -427,9 +422,15 @@ public class MyTunesController implements Initializable {
     }
 
     @FXML
-    private void btnDeleteFromPlaylist(ActionEvent actionEvent) {
-       // Song selectedSong = lstPlaylistSongs.getSelectionModel().getSelectedItem();
-      //  deleteItem(selectedSong, "songFromPlaylist");
+    private void btnDeleteFromPlaylist(ActionEvent actionEvent) throws Exception {
+    String tempSongName = lstPlaylistSongs.getSelectionModel().getSelectedItem();
+    ObservableList<Song> songs = songModel.getObservableSongs();
+    for (Song song : songs) {
+        if (song.getName().equals(tempSongName)) {
+            deleteItem(song, "songFromPlaylist");
+        }
+        playlistUpdate();
+    }
     }
 
     @FXML
@@ -470,7 +471,11 @@ public class MyTunesController implements Initializable {
                         throw new RuntimeException(e);
                     }
                 } else if ("songFromPlaylist".equals(itemType)) {
-                    playlistModel.removeSongFromPlaylist((Song) selectedItem);
+                    try {
+                        songModel.removeSongFromPlaylist(lstPlayList.getSelectionModel().getSelectedItem(), (Song) selectedItem);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 } else if ("song".equals(itemType)) {
                     try {
                         songModel.deleteSong((Song) selectedItem);
@@ -528,6 +533,9 @@ public class MyTunesController implements Initializable {
     }
     @FXML
     private void playlistSelection(MouseEvent mouseEvent) throws Exception {
+        playlistUpdate();
+        }
+    private void playlistUpdate() throws Exception {
         Playlist selectedPlaylist = lstPlayList.getSelectionModel().getSelectedItem();
         ObservableList<Song> songsOnPlaylist = songModel.getSongsOnPlaylist(selectedPlaylist);
         lstPlaylistSongs.getItems().clear();

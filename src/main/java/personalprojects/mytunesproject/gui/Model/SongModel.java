@@ -42,6 +42,10 @@ public class SongModel {
         songManager.addSongToPlaylist(playlist, song);
     }
 
+    public void removeSongFromPlaylist(Playlist playlist, Song song) throws Exception {
+        songManager.deleteSongFromPlaylist(playlist, song);
+    }
+
 
     public void searchSongs(String query) {
         filteredSongs.clear();
