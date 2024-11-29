@@ -76,6 +76,7 @@ public class PlaylistSongsDAO_DB {
         }
         catch (SQLException ex) {
             throw new RuntimeException(ex);
+            
         }
     }
 }
