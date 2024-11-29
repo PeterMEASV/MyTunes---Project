@@ -76,6 +76,8 @@ public class MyTunesController implements Initializable {
     private ScheduledExecutorService executorService;
     private double volumeNumber = 50;
     private boolean muteCheck = false;
+    @FXML
+    private Button btnMute;
 
 
     public MyTunesController() {
@@ -133,11 +135,31 @@ public class MyTunesController implements Initializable {
             }
         }, 0, 1200, TimeUnit.MILLISECONDS);
         executorService.close();
+        
+        lstSongs.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                playSelectedSong(newValue);
+            }
+        });
+           String  iconPath = "/personalprojects/mytunesproject/UI Icons/volumeMediumIcon.png";
+           setButtonIcon(btnMute, iconPath);
 
 
 
 
 
+    }
+
+    private void playSelectedSong(Song selectedSong) {
+        try {
+            if (mediaPlayer != null) {
+                mediaPlayer.stop(); // Stop the current song if there is one
+            }
+            playNewSong(selectedSong); // Play the newly selected song
+        } catch (IOException e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing the selected song: " + e.getMessage());
+            errorAlert.showAndWait();
+        }
     }
 
 
@@ -260,6 +282,7 @@ public class MyTunesController implements Initializable {
 
 
     public void btnPlay(ActionEvent actionEvent) {
+        Song selectedSong = lstSongs.getSelectionModel().getSelectedItem();
         try {
             if (mediaPlayer != null) {
                 if (isPlaying) {
@@ -268,21 +291,16 @@ public class MyTunesController implements Initializable {
                     isPlaying = false;
                     txtCurrentlyPlaying.setText("Paused");
                 } else {
-                    mediaPlayer.seek(Duration.seconds(sliderDuration.getValue())); // Seek to the current slider position
+                    mediaPlayer.seek(Duration.seconds(currentTime)); // Seek to the current time
                     mediaPlayer.play();
                     isPlaying = true;
-                    txtCurrentlyPlaying.setText("Now Playing: " + lstSongs.getItems().get(currentSongIndex).getName());
+                    txtCurrentlyPlaying.setText("Now Playing: " + selectedSong.getName());
                 }
             } else {
-                Song selectedSong = lstSongs.getSelectionModel().getSelectedItem();
                 if (selectedSong == null) {
-                    if (currentSongIndex >= 0 && currentSongIndex < lstSongs.getItems().size()) {
-                        selectedSong = lstSongs.getItems().get(currentSongIndex);
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a song to play.");
-                        alert.showAndWait();
-                        return;
-                    }
+                    Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a song to play.");
+                    alert.showAndWait();
+                    return;
                 }
                 playNewSong(selectedSong);
             }
@@ -479,7 +497,7 @@ public class MyTunesController implements Initializable {
         } else if (volumePercentage > 70) {
             iconPath = "/personalprojects/mytunesproject/UI Icons/volumeHighIcon.png";
         }
-        setButtonIcon(button, iconPath);
+        setButtonIcon(btnMute, iconPath);
     }
 
     private void setButtonIcon(Button button, String iconPath) {
