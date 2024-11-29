@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 //project
+import personalprojects.mytunesproject.BE.Playlist;
 import personalprojects.mytunesproject.BE.Song;
 import personalprojects.mytunesproject.bll.SongManager;
 
@@ -14,6 +15,7 @@ public class SongModel {
 
     private ObservableList<Song> lstSongs;
     private ObservableList<Song> filteredSongs;
+    private ObservableList<Song> lstSongsOnPlaylist;
     private SongManager songManager;
 
 
@@ -22,12 +24,22 @@ public class SongModel {
         lstSongs = FXCollections.observableArrayList();
         lstSongs.addAll(songManager.getAllSongs());
         filteredSongs = FXCollections.observableArrayList(lstSongs);
+        lstSongsOnPlaylist = FXCollections.observableArrayList();
     }
 
     public ObservableList<Song> getObservableSongs() throws Exception {
         update();
         return filteredSongs;
 
+    }
+
+    public ObservableList<Song> getSongsOnPlaylist(Playlist playlist) throws Exception {
+        lstSongsOnPlaylist.clear();
+        lstSongsOnPlaylist.addAll(songManager.getSongsOnPlaylist(playlist));
+        return lstSongsOnPlaylist;
+    }
+    public void addSongToPlaylist(Playlist playlist, Song song) throws Exception {
+        songManager.addSongToPlaylist(playlist, song);
     }
 
 

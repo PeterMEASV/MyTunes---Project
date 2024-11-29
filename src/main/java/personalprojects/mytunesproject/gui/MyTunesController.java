@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -23,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -48,7 +50,7 @@ public class MyTunesController implements Initializable {
     @FXML
     private TableView<Playlist> lstPlayList;
     @FXML
-    private ListView<Song> lstPlaylistSongs;
+    private ListView<String> lstPlaylistSongs;
     @FXML
     private TableView<Song> lstSongs;
 
@@ -112,12 +114,6 @@ public class MyTunesController implements Initializable {
             return new SimpleStringProperty(song.getFormattedTime());
         });
 
-        try {
-            lstPlaylistSongs.setItems(songModel.getObservableSongs());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
         lstPlayList.setItems(playlistModel.getObservablePlaylists());
 
         clnPlaylistName.setCellValueFactory(new PropertyValueFactory<>("playlistName"));
@@ -176,7 +172,14 @@ public class MyTunesController implements Initializable {
 
 
     @FXML
-    private void btnMoveToPlaylist(ActionEvent actionEvent) {
+    private void btnMoveToPlaylist(ActionEvent actionEvent) throws Exception {
+        songModel.addSongToPlaylist(lstPlayList.getSelectionModel().getSelectedItem(), lstSongs.getSelectionModel().getSelectedItem());
+        Playlist selectedPlaylist = lstPlayList.getSelectionModel().getSelectedItem();
+        ObservableList<Song> songsOnPlaylist = songModel.getSongsOnPlaylist(selectedPlaylist);
+        lstPlaylistSongs.getItems().clear();
+        for (Song song : songsOnPlaylist) {
+            lstPlaylistSongs.getItems().add(song.getName());
+        }
     }
 
     public void addNewPlaylist(String playlistName) throws Exception {
@@ -425,8 +428,8 @@ public class MyTunesController implements Initializable {
 
     @FXML
     private void btnDeleteFromPlaylist(ActionEvent actionEvent) {
-        Song selectedSong = lstPlaylistSongs.getSelectionModel().getSelectedItem();
-        deleteItem(selectedSong, "songFromPlaylist");
+       // Song selectedSong = lstPlaylistSongs.getSelectionModel().getSelectedItem();
+      //  deleteItem(selectedSong, "songFromPlaylist");
     }
 
     @FXML
@@ -521,6 +524,15 @@ public class MyTunesController implements Initializable {
     public void sliderDuration(MouseEvent mouseEvent) {
         if (mediaPlayer != null && !sliderDuration.isValueChanging()) {
             mediaPlayer.seek(Duration.seconds(sliderDuration.getValue()));
+        }
+    }
+    @FXML
+    private void playlistSelection(MouseEvent mouseEvent) throws Exception {
+        Playlist selectedPlaylist = lstPlayList.getSelectionModel().getSelectedItem();
+        ObservableList<Song> songsOnPlaylist = songModel.getSongsOnPlaylist(selectedPlaylist);
+        lstPlaylistSongs.getItems().clear();
+        for (Song song : songsOnPlaylist) {
+            lstPlaylistSongs.getItems().add(song.getName());
         }
     }
 }
