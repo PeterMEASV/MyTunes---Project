@@ -17,21 +17,38 @@ public class PlaylistDAO_DB implements IPlaylistDataAccess {
 
     @Override
     public List<Playlist> getAllPlaylists() throws Exception {
-        // Implement logic to retrieve playlists from a database
-        List<Playlist> playlists = new ArrayList<>();
-        // Example: fetch from database
-        // playlists = database.getPlaylists();
-        return playlists;
+        ArrayList<Playlist> allPlaylists = new ArrayList<>();
+
+
+        try (Connection conn = db.getConnection();
+             Statement stmt = conn.createStatement())
+        {
+            String sql = "SELECT * FROM dbo.Playlists";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                int playlistID = rs.getInt("PlaylistID");
+                String Name = rs.getString("Name");
+
+                Playlist playlist = new Playlist(playlistID, Name);
+                allPlaylists.add(playlist);
+            }
+            return allPlaylists;
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new Exception("Could not get Songs from database", ex);
+        }
     }
 
     @Override
-    public Playlist createPlaylist(Playlist playlist) throws Exception {
+    public Playlist createPlaylist(String playlist) throws Exception {
         String sql = "INSERT INTO dbo.Playlists(Name) VALUES (?)";
 
         try (Connection conn = db.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            stmt.setString(1, playlist.getPlaylistName());
+            stmt.setString(1, playlist);
 
 
             stmt.executeUpdate();
@@ -43,7 +60,7 @@ public class PlaylistDAO_DB implements IPlaylistDataAccess {
                 playlistID = rs.getInt(1);
             }
 
-            return new Playlist(playlist.getPlaylistName(), 0, "0");
+            return new Playlist(playlistID, playlist);
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new Exception("Could not create song", ex);
@@ -59,10 +76,18 @@ public class PlaylistDAO_DB implements IPlaylistDataAccess {
     }
 
     @Override
-    public Playlist deletePlaylist(Playlist playlist) throws Exception {
-        // Implement logic to delete a playlist from the database
-        // Example: delete the playlist from the database
-        // database.deletePlaylist(playlist);
-        return playlist; // Return the deleted playlist
+    public void deletePlaylist(Playlist playlist) throws Exception {
+        String sql = "DELETE FROM dbo.Playlists WHERE Name = ?";
+
+        try(Connection conn = db.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setString(1, playlist.getPlaylistName());
+            stmt.executeUpdate();
+        }
+        catch (SQLException ex)
+        {
+            throw new Exception("Could not get movies from database.", ex);
+        }
     }
 }

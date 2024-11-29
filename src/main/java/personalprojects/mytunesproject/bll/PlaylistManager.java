@@ -19,7 +19,7 @@ public class PlaylistManager {
         return playlistDAO_db.getAllPlaylists();
     }
 
-    public Playlist createPlaylist(Playlist playlist) throws Exception {
+    public Playlist createPlaylist(String playlist) throws Exception {
         return playlistDAO_db.createPlaylist(playlist);
     }
 
@@ -27,7 +27,7 @@ public class PlaylistManager {
         return playlistDAO_db.updatePlaylist(playlist);
     }
 
-    public Playlist deletePlaylist(Playlist playlist) throws Exception {
-        return playlistDAO_db.deletePlaylist(playlist);
+    public void deletePlaylist(Playlist playlist) throws Exception {
+         playlistDAO_db.deletePlaylist(playlist);
     }
 }

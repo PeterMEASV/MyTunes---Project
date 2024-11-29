@@ -68,6 +68,14 @@ public class MyTunesController implements Initializable {
     private Slider sliderDuration;
     @FXML
     private Label volumeProcent;
+    @FXML
+    private Button btnMute;
+    @FXML
+    private TableColumn<Playlist, String> clnPlaylistName;
+    @FXML
+    private TableColumn<Playlist, String> clnPlaylistSongs;
+    @FXML
+    private TableColumn<Playlist, String> clnPlaylistTime;
 
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
@@ -76,8 +84,7 @@ public class MyTunesController implements Initializable {
     private ScheduledExecutorService executorService;
     private double volumeNumber = 50;
     private boolean muteCheck = false;
-    @FXML
-    private Button btnMute;
+
 
 
     public MyTunesController() {
@@ -112,6 +119,11 @@ public class MyTunesController implements Initializable {
         }
 
         lstPlayList.setItems(playlistModel.getObservablePlaylists());
+
+        clnPlaylistName.setCellValueFactory(new PropertyValueFactory<>("playlistName"));
+        clnPlaylistSongs.setCellValueFactory(new PropertyValueFactory<>("playlistID"));
+            clnPlaylistTime.setCellValueFactory(cellData -> {Playlist playlist = cellData.getValue();
+                return new SimpleStringProperty("0");});
 
         // Volume slider setup
         sliderVolume.setValue(50);
@@ -168,9 +180,7 @@ public class MyTunesController implements Initializable {
     }
 
     public void addNewPlaylist(String playlistName) throws Exception {
-        Playlist newPlaylist = new Playlist(playlistName, 0, "00:00");
-
-        playlistModel.getObservablePlaylists().add(newPlaylist);
+        String newPlaylist = playlistName;
 
         playlistModel.createPlaylist(newPlaylist);
     }
@@ -451,7 +461,11 @@ public class MyTunesController implements Initializable {
         confirmationAlert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 if ("playlist".equals(itemType)) {
-                    playlistModel.deletePlaylist((Playlist) selectedItem);
+                    try {
+                        playlistModel.deletePlaylist((Playlist) selectedItem);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 } else if ("songFromPlaylist".equals(itemType)) {
                     playlistModel.removeSongFromPlaylist((Song) selectedItem);
                 } else if ("song".equals(itemType)) {

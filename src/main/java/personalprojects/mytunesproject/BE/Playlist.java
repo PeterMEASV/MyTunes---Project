@@ -5,11 +5,12 @@ public class Playlist {
     private String playlistName;
     private int Songs;
     private String Duration;
+    private int playlistID;
 
-    public Playlist(String playlistName, int songs, String duration) {
+    public Playlist(int playlistID, String playlistName) {
         this.playlistName = playlistName;
-        Songs = songs;
-        Duration = duration;
+        this.playlistID = playlistID;
+
     }
 
 
@@ -21,19 +22,10 @@ public class Playlist {
         this.playlistName = playlistName;
     }
 
-    public int getSongs() {
-        return Songs;
+    public int getPlaylistID() {
+        return playlistID;
     }
-
-    public void setSongs(int songs) {
-        Songs = songs;
-    }
-
-    public String getDuration() {
-        return Duration;
-    }
-
-    public void setDuration(String duration) {
-        Duration = duration;
+    public void setPlaylistID(int playlistID) {
+        this.playlistID = playlistID;
     }
 }

@@ -15,22 +15,25 @@ public class PlaylistModel {
     private ObservableList<Playlist> lstPlayList;
     PlaylistManager playlistManager = new PlaylistManager();
 
-    public PlaylistModel() throws IOException {
+    public PlaylistModel() throws Exception {
 
         lstPlayList = FXCollections.observableArrayList();
-
+        lstPlayList.addAll(playlistManager.getAllPlaylists());
     }
 
     public ObservableList<Playlist> getObservablePlaylists() {
         return lstPlayList;
     }
 
-    public void createPlaylist(Playlist newPlaylist) throws Exception {
-        playlistManager.createPlaylist(newPlaylist);
-        lstPlayList.add(newPlaylist);
+    public void createPlaylist(String newPlaylist) throws Exception {
+        Playlist tempPlaylist = playlistManager.createPlaylist(newPlaylist);
+        lstPlayList.add(tempPlaylist);
+
     }
 
-    public void deletePlaylist(Playlist selectedPlaylist) {
+    public void deletePlaylist(Playlist selectedPlaylist) throws Exception {
+        playlistManager.deletePlaylist(selectedPlaylist);
+        lstPlayList.remove(selectedPlaylist);
     }
 
     public void removeSongFromPlaylist(Song selectedSong) {
