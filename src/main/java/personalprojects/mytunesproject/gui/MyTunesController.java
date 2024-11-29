@@ -13,6 +13,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -117,6 +119,8 @@ public class MyTunesController implements Initializable {
                 DecimalFormat format = new DecimalFormat("#");
                 volumeProcent.setText(format.format((volumeNumber*100)) + "%");
                 mediaPlayer.setVolume(volumeNumber);
+
+                updateVolumeIcon((Button) sliderVolume.getScene().lookup("#btnMute"), volumeNumber * 100);
             }
         });
 
@@ -129,6 +133,11 @@ public class MyTunesController implements Initializable {
             }
         }, 0, 1200, TimeUnit.MILLISECONDS);
         executorService.close();
+
+
+
+
+
     }
 
 
@@ -259,7 +268,7 @@ public class MyTunesController implements Initializable {
                     isPlaying = false;
                     txtCurrentlyPlaying.setText("Paused");
                 } else {
-                    mediaPlayer.seek(javafx.util.Duration.seconds(sliderDuration.getValue())); // Seek to the current slider position
+                    mediaPlayer.seek(Duration.seconds(sliderDuration.getValue())); // Seek to the current slider position
                     mediaPlayer.play();
                     isPlaying = true;
                     txtCurrentlyPlaying.setText("Now Playing: " + lstSongs.getItems().get(currentSongIndex).getName());
@@ -447,18 +456,39 @@ public class MyTunesController implements Initializable {
     }
 
     public void btnMute(ActionEvent actionEvent) {
-        if (muteCheck == false){
-            muteCheck = true;
-            mediaPlayer.setVolume(0);
-        } else if (muteCheck == true) {
-            mediaPlayer.setVolume(volumeNumber);
-            muteCheck = false;
+        Button muteButton = (Button) actionEvent.getSource();
+        if (mediaPlayer != null) {
+            if (!muteCheck) {
+                muteCheck = true;
+                mediaPlayer.setVolume(0);
+                setButtonIcon(muteButton, "/personalprojects/mytunesproject/UI Icons/volumeMuteIcon.png");
+            } else {
+                muteCheck = false;
+                mediaPlayer.setVolume(volumeNumber);
+                updateVolumeIcon(muteButton, volumeNumber * 100);
+            }
         }
+    }
+
+    private void updateVolumeIcon(Button button, double volumePercentage) {
+        String iconPath = "/personalprojects/mytunesproject/UI Icons/volumeMuteIcon.png"; // Default to mute icon
+        if (volumePercentage > 0 && volumePercentage <= 30) {
+            iconPath = "/personalprojects/mytunesproject/UI Icons/volumeLowIcon.png";
+        } else if (volumePercentage > 30 && volumePercentage <= 70) {
+            iconPath = "/personalprojects/mytunesproject/UI Icons/volumeMediumIcon.png";
+        } else if (volumePercentage > 70) {
+            iconPath = "/personalprojects/mytunesproject/UI Icons/volumeHighIcon.png";
+        }
+        setButtonIcon(button, iconPath);
+    }
+
+    private void setButtonIcon(Button button, String iconPath) {
+        button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(iconPath))));
     }
 
     public void sliderDuration(MouseEvent mouseEvent) {
         if (mediaPlayer != null && !sliderDuration.isValueChanging()) {
-            mediaPlayer.seek(javafx.util.Duration.seconds(sliderDuration.getValue()));
+            mediaPlayer.seek(Duration.seconds(sliderDuration.getValue()));
         }
     }
 }

@@ -9,7 +9,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personalprojects.mytunesproject.gui.MyTunesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personalprojects.mytunesproject.gui.MyTunesController">
    <children>
       <Button layoutX="291.0" layoutY="519.0" mnemonicParsing="false" onAction="#btnLastSong" prefHeight="42.0" prefWidth="45.0" text="&lt;" />
       <Button layoutX="351.0" layoutY="519.0" mnemonicParsing="false" onAction="#btnPlay" prefHeight="42.0" prefWidth="45.0" text="=" />
@@ -49,7 +49,7 @@
       <Button layoutX="514.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnDeleteSong" text="Delete" />
       <Button layoutX="723.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnCloseProgram" text="Close" />
       <Slider fx:id="sliderVolume" layoutX="665.0" layoutY="519.0" prefHeight="42.0" prefWidth="116.0" />
-      <Button layoutX="612.0" layoutY="519.0" mnemonicParsing="false" onAction="#btnMute" prefHeight="42.0" prefWidth="45.0" text="🔊" />
+      <Button fx:id="btnMute" layoutX="612.0" layoutY="519.0" mnemonicParsing="false" onAction="#btnMute" prefHeight="42.0" prefWidth="45.0" text="🔊" />
       <Slider fx:id="sliderDuration" layoutX="124.0" layoutY="561.0" onMouseClicked="#sliderDuration" onMouseDragged="#sliderDuration" onMousePressed="#sliderDuration" prefHeight="42.0" prefWidth="500.0" />
       <Label fx:id="volumeProcent" layoutX="709.0" layoutY="548.0" text="50% " />
    </children>
