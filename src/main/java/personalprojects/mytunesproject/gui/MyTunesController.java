@@ -53,9 +53,6 @@ public class MyTunesController implements Initializable {
     private ListView<String> lstPlaylistSongs;
     @FXML
     private TableView<Song> lstSongs;
-
-    private SongModel songModel;
-    private PlaylistModel playlistModel;
     @FXML
     private TableColumn<Song, String> clnTitleSong;
     @FXML
@@ -79,6 +76,8 @@ public class MyTunesController implements Initializable {
     @FXML
     private TableColumn<Playlist, String> clnPlaylistTime;
 
+    private SongModel songModel;
+    private PlaylistModel playlistModel;
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
     private double currentTime = 0;
@@ -122,18 +121,25 @@ public class MyTunesController implements Initializable {
                 return new SimpleStringProperty("0");});
 
         // Volume slider setup
+        sliderVolume.setMin(0);
+        sliderVolume.setMax(100);
         sliderVolume.setValue(50);
+
         sliderVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (mediaPlayer != null) {
                 volumeNumber = newValue.doubleValue() / 100.0;
-                DecimalFormat format = new DecimalFormat("#");
-                volumeProcent.setText(format.format((volumeNumber*100)) + "%");
-                mediaPlayer.setVolume(volumeNumber);
+                //This makes it possible for the song to be played at 1% TEMP FIX
+                double adjustedVolume = Math.max(0.005, volumeNumber);
 
+                DecimalFormat format = new DecimalFormat("#");
+                volumeProcent.setText(format.format((volumeNumber *100))+ "%");
+                //mediaPlayer.setVolume(volumeNumber);
+                mediaPlayer.setVolume(adjustedVolume);
                 updateVolumeIcon((Button) sliderVolume.getScene().lookup("#btnMute"), volumeNumber * 100);
             }
         });
 
+        // Duration Slider
         executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(() -> {
             if (mediaPlayer != null && !sliderDuration.isValueChanging()) {
@@ -143,7 +149,8 @@ public class MyTunesController implements Initializable {
             }
         }, 0, 1200, TimeUnit.MILLISECONDS);
         executorService.close();
-        
+
+        // Volume icon
         lstSongs.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 playSelectedSong(newValue);
@@ -151,17 +158,12 @@ public class MyTunesController implements Initializable {
         });
            String  iconPath = "/personalprojects/mytunesproject/UI Icons/volumeMediumIcon.png";
            setButtonIcon(btnMute, iconPath);
-
-
-
-
-
     }
 
     private void playSelectedSong(Song selectedSong) {
         try {
             if (mediaPlayer != null) {
-                mediaPlayer.stop(); // Stop the current song if there is one
+                mediaPlayer.stop();
             }
             playNewSong(selectedSong); // Play the newly selected song
         } catch (IOException e) {
