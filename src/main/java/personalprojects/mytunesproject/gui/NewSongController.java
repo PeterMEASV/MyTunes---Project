@@ -14,6 +14,8 @@ import personalprojects.mytunesproject.gui.Model.SongModel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,8 +69,23 @@ public class NewSongController {
         fileChooser.setTitle("Open Music file");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Music Files", "*.mp3", "*.wav"));
         File file = fileChooser.showOpenDialog(new Stage());
+
         if (file != null) {
             txtFileName.setText(file.getAbsolutePath());
+
+            // Calculate and display duration using MediaPlayer
+            Media media = new Media(file.toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+
+            mediaPlayer.setOnReady(() -> {
+                // Get the duration in seconds
+                double duration = mediaPlayer.getTotalDuration().toSeconds();
+                txtTimer.setText(formatDuration((int) duration));
+            });
+
+            mediaPlayer.setOnError(() -> {
+                showErrorAlert("Error", "Could not retrieve duration for the selected file.");
+            });
         }
     }
 

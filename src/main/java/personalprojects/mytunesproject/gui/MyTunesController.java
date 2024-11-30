@@ -75,6 +75,10 @@ public class MyTunesController implements Initializable {
     private TableColumn<Playlist, String> clnPlaylistSongs;
     @FXML
     private TableColumn<Playlist, String> clnPlaylistTime;
+    @FXML
+    private Label lblTotalDuration;
+    @FXML
+    private Label lblCurrentDuration;
 
     private SongModel songModel;
     private PlaylistModel playlistModel;
@@ -85,6 +89,7 @@ public class MyTunesController implements Initializable {
     private ScheduledExecutorService executorService;
     private double volumeNumber = 50;
     private boolean muteCheck = false;
+
 
 
 
@@ -170,6 +175,7 @@ public class MyTunesController implements Initializable {
             Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing the selected song: " + e.getMessage());
             errorAlert.showAndWait();
         }
+
     }
 
 
