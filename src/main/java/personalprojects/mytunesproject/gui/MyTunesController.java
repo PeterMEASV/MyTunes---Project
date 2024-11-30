@@ -143,7 +143,7 @@ public class MyTunesController implements Initializable {
         // Volume slider setup
         sliderVolume.setMin(0);
         sliderVolume.setMax(100);
-        sliderVolume.setValue(50);
+        sliderVolume.setValue(20);
 
         // Listener for volume slider changes
         sliderVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
