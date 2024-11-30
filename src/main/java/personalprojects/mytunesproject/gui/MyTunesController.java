@@ -133,7 +133,7 @@ public class MyTunesController implements Initializable {
         sliderVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (mediaPlayer != null) {
                 volumeNumber = newValue.doubleValue() / 100.0;
-                //This makes it possible for the song to be played at 1% TEMP FIX
+                //This makes it possible for the song to be played at 1% TEMP FIX THAT DOES NOT WORK
                 double adjustedVolume = Math.max(0.005, volumeNumber);
 
                 DecimalFormat format = new DecimalFormat("#");
@@ -354,15 +354,24 @@ public class MyTunesController implements Initializable {
             double duration = mediaPlayer.getTotalDuration().toSeconds();
             sliderDuration.setMax(duration);
             sliderDuration.setValue(0);
+
+            // Update the total duration label
+            lblTotalDuration.setText(formatDuration(duration)); // Use existing formatDuration method
+
             mediaPlayer.play();
             mediaPlayer.setVolume(volumeNumber);
             isPlaying = true;
-            currentTime = 0;
+            currentTime = 0; // Reset currentTime when a new song starts
         });
 
+        // Listener to update currentTime and currentDuration label
         mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
             if (!sliderDuration.isValueChanging()) {
                 sliderDuration.setValue(newValue.toSeconds());
+                currentTime = newValue.toSeconds(); // Update currentTime here
+
+                // Update the current duration label
+                lblCurrentDuration.setText(formatDuration(currentTime)); // Use existing formatDuration method
             }
         });
     }
@@ -551,4 +560,11 @@ public class MyTunesController implements Initializable {
             lstPlaylistSongs.getItems().add(song.getName());
         }
     }
+
+    private String formatDuration(double seconds) {
+        int minutes = (int) seconds / 60;
+        int secs = (int) seconds % 60;
+        return String.format("%02d:%02d", minutes, secs);
+    }
+
 }

@@ -52,7 +52,7 @@
       <Button fx:id="btnMute" layoutX="618.0" layoutY="519.0" mnemonicParsing="false" onAction="#btnMute" prefHeight="42.0" prefWidth="40.0" />
       <Slider fx:id="sliderDuration" layoutX="149.0" layoutY="561.0" onMouseClicked="#sliderDuration" onMouseDragged="#sliderDuration" onMousePressed="#sliderDuration" prefHeight="42.0" prefWidth="500.0" />
       <Label fx:id="volumeProcent" layoutX="709.0" layoutY="548.0" text="50% " />
-      <Label fx:id="lblCurrentDuration" layoutX="116.0" layoutY="574.0" text="Filter:" />
-      <Label fx:id="lblTotalDuration" layoutX="644.0" layoutY="574.0" text="Filter:" />
+      <Label fx:id="lblCurrentDuration" layoutX="116.0" layoutY="574.0" text="00:00" />
+      <Label fx:id="lblTotalDuration" layoutX="651.0" layoutY="574.0" text="00:00" />
    </children>
 </AnchorPane>
