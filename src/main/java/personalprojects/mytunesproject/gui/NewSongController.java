@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 import personalprojects.mytunesproject.BE.Song;
 import personalprojects.mytunesproject.bll.SongManager;
 import personalprojects.mytunesproject.gui.Model.SongModel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,15 +84,25 @@ public class NewSongController {
             int songDuration = calculateSeconds();
             String songGenre = DropDownCategory.getValue();
 
+            // Define the destination directory
+            String destinationDir = "src/main/resources/personalprojects/mytunesproject/Songs";
+            Path destinationPath = Paths.get(destinationDir, new File(txtFileName.getText()).getName());
+
+            // Copy the file to the destination directory
+            Files.copy(Paths.get(txtFileName.getText()), destinationPath);
+
+            // Get the new file path
+            String newFilePath = destinationPath.toString();
+
             if (songToEdit == null) {
-                Song newSong = new Song(1, txtSongTitle.getText(), txtSongArtist.getText(), songDuration, songGenre, txtFileName.getText());
+                Song newSong = new Song(1, txtSongTitle.getText(), txtSongArtist.getText(), songDuration, songGenre, newFilePath);
                 songModel.createSong(newSong);
             } else {
                 songToEdit.setName(txtSongTitle.getText());
                 songToEdit.setArtist(txtSongArtist.getText());
                 songToEdit.setDuration(songDuration);
                 songToEdit.setCategory(songGenre);
-                songToEdit.setFilePath(txtFileName.getText());
+                songToEdit.setFilePath(newFilePath); // Update with the new file path
                 songModel.updateSong(songToEdit);
             }
 
