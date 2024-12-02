@@ -782,6 +782,7 @@ public class MyTunesController implements Initializable {
                 itemDeleted = true; // Set flag to true if deletion was successful
             } else if ("songFromPlaylist".equals(itemType)) {
                 songModel.removeSongFromPlaylist(lstPlayList.getSelectionModel().getSelectedItem(), (Song) selectedItem); // Remove song from playlist
+                playlistUpdate();
 
             } else if ("song".equals(itemType)) {
                 removeFromAllPlaylists((Song) selectedItem);
@@ -891,6 +892,7 @@ public class MyTunesController implements Initializable {
         ObservableList<Song> songsOnPlaylist = songModel.getSongsOnPlaylist(selectedPlaylist); // Get songs in the selected playlist
         lstPlaylistSongs.getItems().clear(); // Clear the current list of songs displayed
         lstPlaylistSongs.getItems().addAll(songsOnPlaylist); // Add each song to the ListView
+        lstPlayList.refresh();
 
     }
 
