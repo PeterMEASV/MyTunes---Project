@@ -51,4 +51,8 @@ public class SongManager {
         playlistSongsDAO_DB.deleteSongFromPlaylist(playlist, song);
     }
 
+    public void updatePlaylist(Playlist playlist, List<Song> songs) throws Exception {
+        playlistSongsDAO_DB.updatePlaylistSongs(playlist, songs);
+    }
+
 }

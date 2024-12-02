@@ -102,6 +102,42 @@ public class SongModel {
         filteredSongs.clear();
         filteredSongs.addAll(songManager.getAllSongs());
     }
+
+    public void moveSongInPlaylist(Playlist selectedPlaylist, Song selectedSong, boolean moveSong) throws Exception {
+        // Get the list of songs in the selected playlist
+        ObservableList<Song> songsInPlaylist = getSongsOnPlaylist(selectedPlaylist);
+
+        // Find the index of the selected song
+        int index = songsInPlaylist.indexOf(selectedSong);
+
+        // Check if the song is found and if it can be moved
+        if (index == -1) {
+            throw new Exception("Song not found in the playlist.");
+        }
+
+        if (moveSong && index > 0) { // Move up
+            // Swap with the song above
+            Song songAbove = songsInPlaylist.get(index - 1);
+            songsInPlaylist.set(index - 1, selectedSong);
+            songsInPlaylist.set(index, songAbove);
+        } else if (!moveSong && index < songsInPlaylist.size() - 1) { // Move down
+            // Swap with the song below
+            Song songBelow = songsInPlaylist.get(index + 1);
+            songsInPlaylist.set(index + 1, selectedSong);
+            songsInPlaylist.set(index, songBelow);
+        } else {
+            // If the song is already at the top or bottom, do nothing
+            return;
+        }
+
+        // Update the playlist with the new order
+        updatePlaylist(selectedPlaylist, songsInPlaylist);
+    }
+
+    // Method to persist the new order in your data source
+    private void updatePlaylist(Playlist playlist, ObservableList<Song> song) throws Exception {
+        songManager.updatePlaylist(playlist, song);
+    }
 }
 
 

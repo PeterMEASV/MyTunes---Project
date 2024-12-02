@@ -79,4 +79,34 @@ public class PlaylistSongsDAO_DB {
             
         }
     }
+
+    public void updatePlaylistSongs(Playlist playlist, List<Song> songs) throws SQLException {
+        // Start a transaction
+        try (Connection conn = db.getConnection()) {
+            conn.setAutoCommit(false); // Start transaction
+
+            // Clear existing songs in the playlist
+            String deleteSQL = "DELETE FROM dbo.Connection WHERE PlaylistID = ?";
+            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSQL)) {
+                deleteStmt.setInt(1, playlist.getPlaylistID());
+                deleteStmt.executeUpdate();
+            }
+
+            // Insert songs in the new order
+            String insertSQL = "INSERT INTO dbo.Connection (PlaylistID, SongID) VALUES (?, ?)";
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertSQL)) {
+                for (Song song : songs) {
+                    insertStmt.setInt(1, playlist.getPlaylistID());
+                    insertStmt.setInt(2, song.getSongID());
+                    insertStmt.executeUpdate();
+                }
+            }
+
+            conn.commit(); // Commit transaction
+        } catch (SQLException e) {
+            // Handle SQL exceptions and rollback transaction if necessary
+            throw new SQLException("Error updating playlist songs: " + e.getMessage(), e);
+        }
+    }
+
 }

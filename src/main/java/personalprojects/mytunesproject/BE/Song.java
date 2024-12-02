@@ -1,6 +1,7 @@
 package personalprojects.mytunesproject.BE;
 
 import java.io.File;
+import java.util.Objects;
 
 public class Song {
 
@@ -44,4 +45,17 @@ public Song(int songID, String Name, String Artist, int Duration, String Categor
     int seconds = this.Duration % 60;
     return String.format("%02d:%02d", minutes, seconds);
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Song song = (Song) obj;
+        return songID == song.songID; // Assuming songID is unique
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(songID);
+    }
+
 }
