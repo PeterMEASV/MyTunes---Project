@@ -2,7 +2,6 @@ package personalprojects.mytunesproject.gui;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -24,12 +22,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -672,7 +669,7 @@ public class MyTunesController implements Initializable {
     @FXML
     private void btnDeletePlaylist(ActionEvent actionEvent) {
         Playlist selectedPlaylist = lstPlayList.getSelectionModel().getSelectedItem(); // Get the selected playlist
-        deleteItem(selectedPlaylist, "playlist"); // Call deleteItem method to delete the playlist
+        deleteItem(selectedPlaylist, "playlist", false); // Call deleteItem method to delete the playlist
     }
 
     /**
@@ -692,7 +689,7 @@ public class MyTunesController implements Initializable {
             return; // Exit if no song is selected
         }
 
-        deleteItem(selectedSong, "songFromPlaylist"); // Call deleteItem method to delete the song from the playlist
+        deleteItem(selectedSong, "songFromPlaylist", false); // Call deleteItem method to delete the song from the playlist
         playlistUpdate(); // Update the playlist view
     }
 
@@ -716,7 +713,7 @@ public class MyTunesController implements Initializable {
         System.out.println("Attempting to delete song: " + selectedSong.getName()); // Debug output
 
         try {
-            songModel.deleteSong(selectedSong); // Call delete method
+            deleteItem(selectedSong, "song", false);// Call delete method
             UpdateSongs(); // Refresh the song list
         } catch (Exception e) {
             Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error deleting the song: " + e.getMessage());
@@ -730,7 +727,7 @@ public class MyTunesController implements Initializable {
      * @param selectedItem the item to be deleted
      * @param itemType    the type of item (playlist, song, or songFromPlaylist)
      */
-    private void deleteItem(Object selectedItem, String itemType) {
+    private void deleteItem(Object selectedItem, String itemType, boolean bypass) {
         if (selectedItem == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No Item Selected");
@@ -740,47 +737,60 @@ public class MyTunesController implements Initializable {
             return; // Exit if no item is selected
         }
 
-        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationAlert.setTitle("Confirm Deletion");
-        confirmationAlert.setHeaderText("Are you sure you want to delete this item?");
+        // Only show confirmation alert if bypass is false
+        if (!bypass) {
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirm Deletion");
+            confirmationAlert.setHeaderText("Are you sure you want to delete this item?");
 
-        // Set content text based on item type
-        if ("playlist".equals(itemType)) {
-            confirmationAlert.setContentText("The playlist will be deleted");
-        } else if ("songFromPlaylist".equals(itemType)) {
-            confirmationAlert.setContentText("This song will only be removed from the playlist, not deleted from the system.");
-        } else if ("song".equals(itemType)) {
-            confirmationAlert.setContentText("This song will be deleted from the list.");
-        }
+            // Set content text based on item type
+            if ("playlist".equals(itemType)) {
+                confirmationAlert.setContentText("The playlist will be deleted");
+            } else if ("songFromPlaylist".equals(itemType)) {
+                confirmationAlert.setContentText("This song will only be removed from the playlist, not deleted from the system.");
+            } else if ("song".equals(itemType)) {
+                confirmationAlert.setContentText("This song will be deleted from the list.");
+            }
 
-        confirmationAlert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                // Perform deletion based on item type
-                if ("playlist".equals(itemType)) {
-                    try {
-                        playlistModel.deletePlaylist((Playlist) selectedItem); // Delete the selected playlist
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                } else if ("songFromPlaylist".equals(itemType)) {
-                    try {
-                        songModel.removeSongFromPlaylist(lstPlayList.getSelectionModel().getSelectedItem(), (Song) selectedItem); // Remove song from playlist
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                } else if ("song".equals(itemType)) {
-                    try {
-                        songModel.deleteSong((Song) selectedItem); // Delete the selected song
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+            confirmationAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    performDeletion(selectedItem, itemType);
                 }
+            });
+        } else {
+            // If bypass is true, directly perform deletion without confirmation
+            performDeletion(selectedItem, itemType);
+        }
+    }
+
+    // Method to encapsulate the deletion logic
+    private void performDeletion(Object selectedItem, String itemType) {
+        boolean itemDeleted = false; // Flag to check if an item was deleted
+
+        try {
+            // Perform deletion based on item type
+            if ("playlist".equals(itemType)) {
+                playlistModel.deletePlaylist((Playlist) selectedItem); // Delete the selected playlist
+                itemDeleted = true; // Set flag to true if deletion was successful
+            } else if ("songFromPlaylist".equals(itemType)) {
+                songModel.removeSongFromPlaylist(lstPlayList.getSelectionModel().getSelectedItem(), (Song) selectedItem); // Remove song from playlist
+
+            } else if ("song".equals(itemType)) {
+                removeFromAllPlaylists((Song) selectedItem);
+                songModel.deleteSong((Song) selectedItem); // Delete the selected song
+                itemDeleted = true; // Set flag to true if deletion was successful
+            }
+
+            // Show success alert only if an item was deleted
+            if (itemDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle("Item Deleted");
                 successAlert.setContentText("The item has been deleted.");
                 successAlert.showAndWait(); // Show success alert after deletion
             }
-        });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -886,5 +896,22 @@ public class MyTunesController implements Initializable {
         int minutes = (int) seconds / 60;
         int secs = (int) seconds % 60;
         return String.format("%02d:%02d", minutes, secs);
+    }
+
+    private void removeFromAllPlaylists(Song selectedSong){
+            for(int i = 0; i < lstPlayList.getItems().size(); i++){
+                lstPlayList.getSelectionModel().select(i);
+                System.out.println("test1");
+
+                for(int j = 0; j < lstPlaylistSongs.getItems().size(); j++){
+                    System.out.println("test2");
+                    lstPlaylistSongs.getSelectionModel().select(j);
+                    if(lstPlaylistSongs.getSelectionModel().getSelectedItem().equals(selectedSong)){
+                        System.out.println("test3");
+                        deleteItem(lstPlaylistSongs.getSelectionModel().getSelectedItem(), "songFromPlaylist", true);
+                    }
+
+                }
+            }
     }
 }
