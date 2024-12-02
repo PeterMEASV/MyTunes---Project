@@ -81,6 +81,7 @@ public class NewSongController {
                 // Get the duration in seconds
                 double duration = mediaPlayer.getTotalDuration().toSeconds();
                 txtTimer.setText(formatDuration((int) duration));
+                mediaPlayer.dispose();
             });
 
             mediaPlayer.setOnError(() -> {
