@@ -1,6 +1,7 @@
 package personalprojects.mytunesproject.gui;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -135,25 +135,33 @@ public class MyTunesController implements Initializable {
             Song song = cellData.getValue();
             return new SimpleStringProperty(song.getFormattedTime());
         });
+        try {
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        // Set up the playlist table
         lstPlayList.setItems(playlistModel.getObservablePlaylists());
         clnPlaylistName.setCellValueFactory(new PropertyValueFactory<>("playlistName"));
-        clnPlaylistSongs.setCellValueFactory(new PropertyValueFactory<>("playlistID"));
+        clnPlaylistSongs.setCellValueFactory(cellData -> {
+            Playlist playlist = cellData.getValue();
+            try {
+                ObservableList<Song> songsOnPlaylist = songModel.getSongsOnPlaylist(playlist);
+                return new SimpleStringProperty(Integer.toString(songsOnPlaylist.size()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         clnPlaylistTime.setCellValueFactory(cellData -> {
             Playlist playlist = cellData.getValue();
-            return new SimpleStringProperty("0");
+            try {
+                return new SimpleStringProperty(getFormattedTime((songModel.getTotalDuration(playlist))));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
 
         // Set up cell value factories for song columns in lstPlaylistSongs
         clnTitlePlaylist.setCellValueFactory(new PropertyValueFactory<>("name"));
-        clnArtistPlaylist.setCellValueFactory(new PropertyValueFactory<>("artist"));
-        clnCategoryPlaylist.setCellValueFactory(new PropertyValueFactory<>("category"));
-        clnTimePlaylist.setCellValueFactory(cellData -> {
-            Song song = cellData.getValue();
-            return new SimpleStringProperty(song.getFormattedTime());
-        });
-
 
         // Volume slider setup
         sliderVolume.setMin(0);
@@ -913,5 +921,16 @@ public class MyTunesController implements Initializable {
 
                 }
             }
+    }
+    public String getFormattedTime(int duration){
+        int seconds = duration % 60;
+        int minutes = duration / 60;
+        int hours = minutes/60;
+        for(int i = 0; i < hours; i++)
+        {
+            minutes -=60;
+        }
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 }

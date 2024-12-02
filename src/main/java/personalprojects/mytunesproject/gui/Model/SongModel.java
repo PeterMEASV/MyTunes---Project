@@ -139,6 +139,16 @@ public class SongModel {
     private void updatePlaylist(Playlist playlist, ObservableList<Song> song) throws Exception {
         songManager.updatePlaylist(playlist, song);
     }
+
+
+    public int getTotalDuration(Playlist playlist) throws Exception {
+        ObservableList<Song> songsOnPlaylist = getSongsOnPlaylist(playlist);
+        int duration = 0;
+        for (Song song : songsOnPlaylist) {
+            duration += song.getDuration();
+        }
+        return duration;
+    }
 }
 
 
