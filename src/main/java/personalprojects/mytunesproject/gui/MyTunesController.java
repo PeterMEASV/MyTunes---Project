@@ -531,10 +531,10 @@ public class MyTunesController implements Initializable {
         mediaPlayer = new MediaPlayer(media); // Create a MediaPlayer instance
 
         // Update currentSongIndex based on the song source
-        if (lstSongs.getItems().contains(song)) {
-            currentSongIndex = lstSongs.getItems().indexOf(song);
-        } else if (lstPlaylistSongs.getItems().contains(song)) {
+        if (lstPlaylistSongs.getItems().contains(song)) {
             currentSongIndex = lstPlaylistSongs.getItems().indexOf(song);
+        } else if (lstSongs.getItems().contains(song)) {
+            currentSongIndex = lstSongs.getItems().indexOf(song);
         }
 
         txtCurrentlyPlaying.setText("Now Playing: " + song.getName() + " by " + song.getArtist()); // Update the UI label
@@ -682,13 +682,17 @@ public class MyTunesController implements Initializable {
      */
     @FXML
     private void btnDeleteFromPlaylist(ActionEvent actionEvent) throws Exception {
-        Song tempSongName = lstPlaylistSongs.getSelectionModel().getSelectedItem(); // Get the selected song name
-        ObservableList<Song> songs = songModel.getObservableSongs(); // Get the list of songs
-        for (Song song : songs) {
-            if (song.getName().equals(tempSongName)) {
-                deleteItem(song, "songFromPlaylist"); // Call deleteItem method to delete the song from the playlist
-            }
+        Song selectedSong = lstPlaylistSongs.getSelectionModel().getSelectedItem(); // Get the selected song directly
+        if (selectedSong == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Song Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a song to delete.");
+            alert.showAndWait();
+            return; // Exit if no song is selected
         }
+
+        deleteItem(selectedSong, "songFromPlaylist"); // Call deleteItem method to delete the song from the playlist
         playlistUpdate(); // Update the playlist view
     }
 
@@ -700,7 +704,24 @@ public class MyTunesController implements Initializable {
     @FXML
     private void btnDeleteSong(ActionEvent actionEvent) {
         Song selectedSong = lstSongs.getSelectionModel().getSelectedItem(); // Get the selected song
-        deleteItem(selectedSong, "song"); // Call deleteItem method to delete the song
+        if (selectedSong == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Song Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a song to delete.");
+            alert.showAndWait();
+            return; // Exit if no song is selected
+        }
+
+        System.out.println("Attempting to delete song: " + selectedSong.getName()); // Debug output
+
+        try {
+            songModel.deleteSong(selectedSong); // Call delete method
+            UpdateSongs(); // Refresh the song list
+        } catch (Exception e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error deleting the song: " + e.getMessage());
+            errorAlert.showAndWait(); // Show error alert if deletion fails
+        }
     }
 
     /**

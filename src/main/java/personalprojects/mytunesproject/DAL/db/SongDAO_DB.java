@@ -103,11 +103,15 @@ public class SongDAO_DB implements ISongDataAccess {
             PreparedStatement stmt = conn.prepareStatement(sql))
         {
             stmt.setInt(1, song.getSongID());
-            stmt.executeUpdate();
+            int rowAffected = stmt.executeUpdate();
+
+            if (rowAffected == 0) {
+                throw new Exception("Could not delete song");
+            }
         }
         catch (SQLException ex)
         {
-            throw new Exception("Could not get movies from database.", ex);
+            throw new Exception("Could not get song from database.", ex);
         }
     }
 }

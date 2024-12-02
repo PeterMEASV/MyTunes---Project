@@ -67,6 +67,7 @@ public class SongModel {
         songManager.deleteSong(selectedSong);
         lstSongs.remove(selectedSong);
         filteredSongs.remove(selectedSong);
+        update();
     }
 
     public void createSong(Song selectedSong) throws Exception {
