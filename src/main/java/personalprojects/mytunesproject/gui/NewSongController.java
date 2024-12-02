@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -26,14 +27,17 @@ public class NewSongController {
     @FXML
     private TextField txtSongArtist;
     @FXML
-    private TextField txtTimer;
+    private Label lblTimer;
     @FXML
     private TextField txtFileName;
     @FXML
     private ChoiceBox<String> DropDownCategory;
 
     private SongModel songModel = new SongModel();
+
     private MyTunesController parent;
+
+    private double songDuration;
 
     private Song songToEdit = null;
 
@@ -57,7 +61,7 @@ public class NewSongController {
         if (songToEdit != null) {
             txtSongTitle.setText(songToEdit.getName());
             txtSongArtist.setText(songToEdit.getArtist());
-            txtTimer.setText(formatDuration(songToEdit.getDuration()));
+            lblTimer.setText(formatDuration(songToEdit.getDuration()));
             DropDownCategory.setValue(songToEdit.getCategory());
             txtFileName.setText(songToEdit.getFilePath());
         }
@@ -79,8 +83,8 @@ public class NewSongController {
 
             mediaPlayer.setOnReady(() -> {
                 // Get the duration in seconds
-                double duration = mediaPlayer.getTotalDuration().toSeconds();
-                txtTimer.setText(formatDuration((int) duration));
+                songDuration = mediaPlayer.getTotalDuration().toSeconds();
+                lblTimer.setText(formatDuration((int) songDuration));
                 mediaPlayer.dispose();
             });
 
@@ -98,8 +102,10 @@ public class NewSongController {
 
     @FXML
     private void btnSaveSong(ActionEvent actionEvent) throws Exception {
-        if (!txtSongTitle.getText().isEmpty() && !txtSongArtist.getText().isEmpty() && !txtTimer.getText().isEmpty() && DropDownCategory.getValue() != null && !txtFileName.getText().isEmpty()) {
-            int songDuration = calculateSeconds();
+        if (!txtSongTitle.getText().isEmpty() && !txtSongArtist.getText().isEmpty() && !lblTimer.getText().isEmpty() && DropDownCategory.getValue() != null && !txtFileName.getText().isEmpty()) {
+            if (songDuration < 0){
+                showErrorAlert("Invalid Duration", "Please select a valid music file(.mp3 or .wav) to get duration.");
+            }
             String songGenre = DropDownCategory.getValue();
 
             // Define the destination directory
@@ -113,12 +119,12 @@ public class NewSongController {
             String newFilePath = destinationPath.toString();
 
             if (songToEdit == null) {
-                Song newSong = new Song(1, txtSongTitle.getText(), txtSongArtist.getText(), songDuration, songGenre, newFilePath);
+                Song newSong = new Song(1, txtSongTitle.getText(), txtSongArtist.getText(), (int) songDuration, songGenre, newFilePath);
                 songModel.createSong(newSong);
             } else {
                 songToEdit.setName(txtSongTitle.getText());
                 songToEdit.setArtist(txtSongArtist.getText());
-                songToEdit.setDuration(songDuration);
+                songToEdit.setDuration((int) songDuration);
                 songToEdit.setCategory(songGenre);
                 songToEdit.setFilePath(newFilePath); // Update with the new file path
                 songModel.updateSong(songToEdit);
@@ -134,17 +140,6 @@ public class NewSongController {
         }
     }
 
-    private int calculateSeconds() {
-        try {
-            String[] parts = txtTimer.getText().split(":");
-            int minutes = Integer.parseInt(parts[0]);
-            int seconds = Integer.parseInt(parts[1]);
-            return (minutes * 60) + seconds;
-        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-            showErrorAlert("Invalid Song Length", "Please input a valid duration.");
-            return -1;
-        }
-    }
 
     private void showErrorAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
