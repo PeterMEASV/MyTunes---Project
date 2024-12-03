@@ -585,10 +585,10 @@ public class MyTunesController implements Initializable {
         mediaPlayer = new MediaPlayer(media); // Create a MediaPlayer instance
 
         // Update currentSongIndex based on the song source
-        if (lstPlaylistSongs.getItems().contains(song)) {
-            currentSongIndex = lstPlaylistSongs.getItems().indexOf(song);
-        } else if (lstSongs.getItems().contains(song)) {
+        if (lstSongs.getItems().contains(song)) {
             currentSongIndex = lstSongs.getItems().indexOf(song);
+        } else if (lstPlaylistSongs.getItems().contains(song)) {
+            currentSongIndex = lstPlaylistSongs.getItems().indexOf(song);
         }
 
         txtCurrentlyPlaying.setText("Now Playing: " + song.getName() + " by " + song.getArtist()); // Update the UI label
