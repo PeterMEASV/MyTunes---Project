@@ -94,11 +94,17 @@ public class PlaylistDAO_DB implements IPlaylistDataAccess {
 
     @Override
     public void deletePlaylist(Playlist playlist) throws Exception {
-        String sql = "DELETE FROM dbo.Playlists WHERE Name = ?";
-
-        try(Connection conn = db.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql))
+        try(Connection conn = db.getConnection())
         {
+            // Clear existing songs in the playlist
+            String deleteSQL = "DELETE FROM dbo.Connection WHERE PlaylistID = ?";
+            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSQL)) {
+                deleteStmt.setInt(1, playlist.getPlaylistID());
+                deleteStmt.executeUpdate();
+            }
+
+            String sql = "DELETE FROM dbo.Playlists WHERE Name = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, playlist.getPlaylistName());
             stmt.executeUpdate();
         }
