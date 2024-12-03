@@ -837,6 +837,15 @@ public class MyTunesController implements Initializable {
                 removeFromAllPlaylists((Song) selectedItem);
                 songModel.deleteSong((Song) selectedItem); // Delete the selected song
                 itemDeleted = true; // Set flag to true if deletion was successful
+
+                //Deletes song from resources in Songs folder
+                File songFile = new File(((Song) selectedItem).getFilePath());
+                if (songFile.exists()) {
+                    boolean fileDeleted = songFile.delete();
+                    if (!fileDeleted) {
+                        throw new IOException("Failed to delete the file: " + songFile.getAbsolutePath());
+                    }
+                }
             }
 
             // Show success alert only if an item was deleted
