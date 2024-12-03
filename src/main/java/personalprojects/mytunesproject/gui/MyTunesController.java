@@ -193,14 +193,16 @@ public class MyTunesController implements Initializable {
 
         // Listener for volume slider changes
         sliderVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (mediaPlayer != null) {
+
                 volumeNumber = newValue.doubleValue() / 100.0;
                 double adjustedVolume = Math.max(0.005, volumeNumber);
                 DecimalFormat format = new DecimalFormat("#");
                 volumeProcent.setText(format.format((volumeNumber * 100)) + "%");
-                mediaPlayer.setVolume(adjustedVolume);
+                if(mediaPlayer!= null) {
+                    mediaPlayer.setVolume(adjustedVolume);
+                }
                 updateVolumeIcon((Button) sliderVolume.getScene().lookup("#btnMute"), volumeNumber * 100);
-            }
+
         });
 
         // Duration Slider setup
@@ -544,7 +546,7 @@ public class MyTunesController implements Initializable {
                         mediaPlayer.seek(Duration.seconds(currentTime)); // Seek to the saved time
                         mediaPlayer.play(); // Play the media
                         isPlaying = true; // Update the playing state
-                        txtCurrentlyPlaying.setText("Now Playing: " + selectedSong.getName()); // Update the UI label
+                        txtCurrentlyPlaying.setText("Now Playing: " + selectedSong.getName() + " by " + selectedSong.getArtist()); // Update the UI label
                     } else{
                         Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a song to play.");
                         alert.showAndWait(); // Show warning if no song is selected
@@ -670,32 +672,36 @@ public class MyTunesController implements Initializable {
      */
     public void btnLastSong(ActionEvent actionEvent) {
         ObservableList<Song> songs;
-
-        if (currentSongIndex >= 0 && currentSongIndex < lstPlaylistSongs.getItems().size()) {
-            songs = lstPlaylistSongs.getItems(); // Get the songs from the playlist
+        if (currentTime > 5) {
+            currentTime = 0;
+            mediaPlayer.seek(Duration.millis(currentTime));
         } else {
-            songs = lstSongs.getItems(); // Fallback to the main song list
-        }
+            if (currentSongIndex >= 0 && currentSongIndex < lstPlaylistSongs.getItems().size()) {
+                songs = lstPlaylistSongs.getItems(); // Get the songs from the playlist
+            } else {
+                songs = lstSongs.getItems(); // Fallback to the main song list
+            }
 
-        if (songs.isEmpty()) {
-            txtCurrentlyPlaying.setText("No songs in the playlist.");
-            return;
-        }
+            if (songs.isEmpty()) {
+                txtCurrentlyPlaying.setText("No songs in the playlist.");
+                return;
+            }
 
-        // Decrement the currentSongIndex and check for bounds
-        currentSongIndex--;
-        if (currentSongIndex < 0) {
-            currentSongIndex = songs.size() - 1; // Wrap around to the last song if at the beginning
-        }
-        Song previousSong = songs.get(currentSongIndex);
+            // Decrement the currentSongIndex and check for bounds
+            currentSongIndex--;
+            if (currentSongIndex < 0) {
+                currentSongIndex = songs.size() - 1; // Wrap around to the last song if at the beginning
+            }
+            Song previousSong = songs.get(currentSongIndex);
 
-        try {
-            playNewSong(previousSong);
-        } catch (Exception e) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing the previous song: " + e.getMessage());
-            errorAlert.showAndWait();
-        }
+            try {
+                playNewSong(previousSong);
+            } catch (Exception e) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing the previous song: " + e.getMessage());
+                errorAlert.showAndWait();
+            }
 
+        }
     }
 
     /**
