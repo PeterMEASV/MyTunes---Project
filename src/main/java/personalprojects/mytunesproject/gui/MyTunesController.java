@@ -38,6 +38,9 @@ import personalprojects.mytunesproject.BE.Playlist;
 import personalprojects.mytunesproject.gui.Model.PlaylistModel;
 import personalprojects.mytunesproject.gui.Model.SongModel;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public class MyTunesController implements Initializable {
     // FXML components
     @FXML
@@ -84,6 +87,7 @@ public class MyTunesController implements Initializable {
     private Label lblTotalDuration; // Label to display total duration of the currently playing song
     @FXML
     private Label lblCurrentDuration; // Label to display current duration of the song
+
 
     // Model instances
     private SongModel songModel; // Model for managing songs
@@ -142,6 +146,7 @@ public class MyTunesController implements Initializable {
 
         lstPlayList.setItems(playlistModel.getObservablePlaylists());
         clnPlaylistName.setCellValueFactory(new PropertyValueFactory<>("playlistName"));
+
         clnPlaylistSongs.setCellValueFactory(cellData -> {
             Playlist playlist = cellData.getValue();
             try {
@@ -159,6 +164,24 @@ public class MyTunesController implements Initializable {
                 throw new RuntimeException(e);
             }
         });
+
+        // Update the properties for each playlist after loading them
+        for (Playlist playlist : playlistModel.getObservablePlaylists()) {
+            ObservableList<Song> songsOnPlaylist = null;
+            try {
+                songsOnPlaylist = songModel.getSongsOnPlaylist(playlist);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            playlist.setNumberOfSongs(songsOnPlaylist.size()); // Update the number of songs
+            try {
+                playlist.setTotalDuration(getFormattedTime(songModel.getTotalDuration(playlist))); // Update the total duration
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        // Refresh the TableView to display updated values
+        lstPlayList.refresh();
 
         // Set up cell value factories for song columns in lstPlaylistSongs
         clnTitlePlaylist.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -216,6 +239,18 @@ public class MyTunesController implements Initializable {
                 }
             }
         });
+
+        clnPlaylistName.setCellValueFactory(new PropertyValueFactory<>("playlistName"));
+
+        clnPlaylistSongs.setCellValueFactory(cellData -> {
+            Playlist playlist = cellData.getValue();
+            return playlist.numberOfSongsProperty().asObject().asString(); // Bind to the observable property
+        });
+        clnPlaylistTime.setCellValueFactory(cellData -> {
+            Playlist playlist = cellData.getValue();
+            return playlist.totalDurationProperty(); // Bind to the observable property
+        });
+
 
         // Set initial icon for mute button
         String iconPath = "/personalprojects/mytunesproject/UI Icons/volumeMediumIcon.png";
@@ -889,12 +924,17 @@ public class MyTunesController implements Initializable {
      */
     private void playlistUpdate() throws Exception {
         Playlist selectedPlaylist = lstPlayList.getSelectionModel().getSelectedItem(); // Get the selected playlist
-        ObservableList<Song> songsOnPlaylist = songModel.getSongsOnPlaylist(selectedPlaylist); // Get songs in the selected playlist
-        lstPlaylistSongs.getItems().clear(); // Clear the current list of songs displayed
-        lstPlaylistSongs.getItems().addAll(songsOnPlaylist); // Add each song to the ListView
-        lstPlayList.refresh();
+        if (selectedPlaylist != null) {
+            ObservableList<Song> songsOnPlaylist = songModel.getSongsOnPlaylist(selectedPlaylist); // Get songs in the selected playlist
+            lstPlaylistSongs.getItems().clear(); // Clear the current list of songs displayed
+            lstPlaylistSongs.getItems().addAll(songsOnPlaylist); // Add each song to the ListView
 
+            // Update the observable properties for the selected playlist
+            selectedPlaylist.setNumberOfSongs(songsOnPlaylist.size()); // Update the number of songs
+            selectedPlaylist.setTotalDuration(getFormattedTime(songModel.getTotalDuration(selectedPlaylist))); // Update the total duration
+        }
     }
+
 
     /**
      * Formats the duration from seconds to a string in the format mm:ss.
