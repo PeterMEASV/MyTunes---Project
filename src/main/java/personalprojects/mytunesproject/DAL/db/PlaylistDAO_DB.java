@@ -69,10 +69,27 @@ public class PlaylistDAO_DB implements IPlaylistDataAccess {
 
     @Override
     public Playlist updatePlaylist(Playlist playlist) throws Exception {
-        // Implement logic to update an existing playlist in the database
-        // Example: update the playlist in the database
-        // database.updatePlaylist(playlist);
-        return playlist; // Return the updated playlist
+        String sql = "UPDATE dbo.Playlists SET Name = ? WHERE PlaylistID = ?";
+
+        try (Connection conn = db.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+
+            stmt.setString(1, playlist.getPlaylistName());
+            stmt.setInt(2, playlist.getPlaylistID());
+
+
+            int rowsUpdated = stmt.executeUpdate();
+
+            if (rowsUpdated == 0) {
+                throw new Exception("No playlist found with ID: " + playlist.getPlaylistID());
+            }
+
+            return playlist;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new Exception("Could not update playlist in the database", ex);
+        }
     }
 
     @Override

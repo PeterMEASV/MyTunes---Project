@@ -336,19 +336,33 @@ public class MyTunesController implements Initializable {
      */
     @FXML
     private void btnEditPlaylist(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Playlist.fxml"));
-        Parent scene = loader.load();
+        Playlist selectedPlaylist = lstPlayList.getSelectionModel().getSelectedItem(); // Get the selected playlist
 
-        Stage stage = new Stage();
-        stage.setScene(new Scene(scene));
+        if (selectedPlaylist != null) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Playlist.fxml"));
+            Parent scene = loader.load();
 
-        NewPlaylistController controller = loader.getController();
-        controller.setParent(this); // Set the parent controller
+            Stage stage = new Stage();
+            stage.setScene(new Scene(scene));
 
-        stage.setTitle("New/Edit Playlist");
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show(); // Show the edit playlist dialog
+            NewPlaylistController controller = loader.getController();
+            controller.setParent(this); // Set parent controller
+            controller.setPlaylist(selectedPlaylist); // Pass the playlist to edit
+
+            stage.setTitle("Edit Playlist");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        }
+    }
+
+    /**
+     *
+     * @param playlist
+     * @throws Exception
+     */
+    public void updatePlaylist(Playlist playlist) throws Exception {
+        playlistModel.updatePlaylist(playlist);
     }
 
     /**

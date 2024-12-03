@@ -35,4 +35,8 @@ public class PlaylistModel {
         playlistManager.deletePlaylist(selectedPlaylist);
         lstPlayList.remove(selectedPlaylist);
     }
+
+    public void updatePlaylist(Playlist playlist) throws Exception {
+        playlistManager.updatePlaylist(playlist);
+    }
 }
