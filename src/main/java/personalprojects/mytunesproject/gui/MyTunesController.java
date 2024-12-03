@@ -525,9 +525,11 @@ public class MyTunesController implements Initializable {
      */
     @FXML
     public void btnPlay(ActionEvent actionEvent) {
-        Song selectedSong = lstSongs.getSelectionModel().getSelectedItem(); // Get the selected song
+        Song selectedSong = lstPlaylistSongs.getSelectionModel().getSelectedItem();
+          // Get the selected song
         if (selectedSong == null) {
-            selectedSong = lstPlaylistSongs.getSelectionModel().getSelectedItem(); // Try to get the selected song from lstPlaylistSongs
+            selectedSong = lstSongs.getSelectionModel().getSelectedItem();
+             // Try to get the selected song from lstPlaylistSongs
         }
 
         try {
@@ -997,5 +999,11 @@ public class MyTunesController implements Initializable {
         }
 
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    @FXML
+    private void OnSongsClick(MouseEvent mouseEvent) {
+        lstPlayList.getSelectionModel().clearSelection();
+        lstPlaylistSongs.getItems().clear();
     }
 }

@@ -30,7 +30,7 @@
             <TableColumn fx:id="clnTitlePlaylist" prefWidth="143.3332977294922" text="Title" />
          </columns>
       </TableView>
-      <TableView fx:id="lstSongs" layoutX="420.0" layoutY="100.0" prefHeight="367.0" prefWidth="354.0">
+      <TableView fx:id="lstSongs" layoutX="420.0" layoutY="100.0" onMouseClicked="#OnSongsClick" prefHeight="367.0" prefWidth="354.0">
          <columns>
             <TableColumn fx:id="clnTitleSong" prefWidth="100.0" text="Title" />
             <TableColumn fx:id="clnArtistSong" prefWidth="92.0" text="Artist" />
