@@ -1,0 +1,10 @@
+.root{
+    -fx-background-color: #2C2C2C;
+}
+.label{
+    -fx-text-fill: white;
+    -fx-font-family: "Copperplate Gothic Light";
+}
+.table-view{
+    -fx-background-color: #3D3D3D;
+}

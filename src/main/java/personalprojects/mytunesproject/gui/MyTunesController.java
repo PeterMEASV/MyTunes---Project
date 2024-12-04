@@ -3,6 +3,8 @@ package personalprojects.mytunesproject.gui;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -108,7 +111,7 @@ public class MyTunesController implements Initializable {
     private double currentTime = 0; // Current playback time of the song
     private int currentSongIndex = -1; // Index of the currently playing song
     private ScheduledExecutorService executorService; // Executor service for updating UI components
-    private double volumeNumber = 50; // Current volume level
+    private double volumeNumber = 1; // Current volume level
     private boolean muteCheck = false; // Flag to check if the audio is muted
 
     private boolean isShuffleEnabled = false;
@@ -211,14 +214,14 @@ public class MyTunesController implements Initializable {
         // Listener for volume slider changes
         sliderVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
 
-                volumeNumber = newValue.doubleValue() / 100.0;
-                double adjustedVolume = Math.max(0.005, volumeNumber);
-                DecimalFormat format = new DecimalFormat("#");
-                volumeProcent.setText(format.format((volumeNumber * 100)) + "%");
-                if(mediaPlayer!= null) {
-                    mediaPlayer.setVolume(adjustedVolume);
-                }
-                updateVolumeIcon((Button) sliderVolume.getScene().lookup("#btnMute"), volumeNumber * 100);
+            volumeNumber = newValue.doubleValue() / 100.0;
+            double adjustedVolume = Math.max(0.005, volumeNumber);
+            DecimalFormat format = new DecimalFormat("#");
+            volumeProcent.setText(format.format((volumeNumber * 100)) + "%");
+            if (mediaPlayer != null) {
+                mediaPlayer.setVolume(adjustedVolume);
+            }
+            updateVolumeIcon((Button) sliderVolume.getScene().lookup("#btnMute"), volumeNumber * 100);
 
         });
 
@@ -290,6 +293,63 @@ public class MyTunesController implements Initializable {
         setButtonIcon(btnShuffle, shuffleIcon);
 
          */
+// Duration Slider setup
+        executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(() -> {
+            if (mediaPlayer != null && !sliderDuration.isValueChanging()) {
+                Platform.runLater(() -> {
+                    sliderDuration.setValue(mediaPlayer.getCurrentTime().toSeconds());
+                });
+            }
+        }, 0, 1200, TimeUnit.MILLISECONDS);
+        executorService.shutdown();
+
+        // Listener for song selection
+        lstSongs.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                playSelectedSong(newValue);
+            }
+        });
+
+        // Listener for playlist selection
+        lstPlayList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                try {
+                    playlistUpdate(); // Call the method to update the songs in the selected playlist
+                } catch (Exception e) {
+                    displayError(e); // Handle any exceptions that occur during the update
+                }
+            }
+        });
+        Platform.runLater(() -> {
+        StackPane trackPane = (StackPane) sliderDuration.lookup(".track");
+
+        sliderDuration.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                double percentage = (new_val.doubleValue() / sliderDuration.getMax()) * 100;
+                String style = String.format("-fx-background-color: linear-gradient(to right, #2D819D %.0f%%, #969696 %.0f%%);",
+                        percentage, percentage);
+                trackPane.setStyle(style);
+            }
+        });
+
+        trackPane.setStyle("-fx-background-color: linear-gradient(to right, #2D819D 0%, #969696 0%);");
+    });
+
+        Platform.runLater(() -> {
+            StackPane trackPane = (StackPane) sliderVolume.lookup(".track");
+
+            sliderVolume.valueProperty().addListener(new ChangeListener<Number>() {
+                public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                    double percentage = (new_val.doubleValue() / sliderVolume.getMax()) * 100;
+                    String style = String.format("-fx-background-color: linear-gradient(to right, #2D819D %.0f%%, #969696 %.0f%%);",
+                            percentage, percentage);
+                    trackPane.setStyle(style);
+                }
+            });
+
+            trackPane.setStyle("-fx-background-color: linear-gradient(to right, #2D819D 0%, #969696 0%);");
+        });
     }
 
     /**
@@ -620,6 +680,7 @@ public class MyTunesController implements Initializable {
 
         Media media = new Media(file.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(0.01);
 
         if (lstPlaylistSongs.getItems().contains(song)) {
             currentSongIndex = lstPlaylistSongs.getItems().indexOf(song);
