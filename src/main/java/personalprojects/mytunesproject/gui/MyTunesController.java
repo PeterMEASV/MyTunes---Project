@@ -47,7 +47,6 @@ import personalprojects.mytunesproject.gui.Model.SongModel;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-
 public class MyTunesController implements Initializable {
 
     // FXML components
@@ -184,6 +183,7 @@ public class MyTunesController implements Initializable {
                 throw new RuntimeException(e);
             }
         });
+        lstSongs.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
 
         // Update the properties for each playlist after loading them
         for (Playlist playlist : playlistModel.getObservablePlaylists()) {
@@ -233,7 +233,7 @@ public class MyTunesController implements Initializable {
                     sliderDuration.setValue(mediaPlayer.getCurrentTime().toSeconds());
                 });
             }
-        }, 0, 1200, TimeUnit.MILLISECONDS);
+        }, 0, 100, TimeUnit.MILLISECONDS);
         executorService.shutdown();
 
         // Listener for song selection
@@ -326,14 +326,15 @@ public class MyTunesController implements Initializable {
 
         sliderDuration.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                sliderDuration.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
                 double percentage = (new_val.doubleValue() / sliderDuration.getMax()) * 100;
-                String style = String.format("-fx-background-color: linear-gradient(to right, #2D819D %.0f%%, #969696 %.0f%%);",
+                String style = String.format("-fx-background-color: linear-gradient(to right, #89ec40  %.0f%%, #969696 %.0f%%);",
                         percentage, percentage);
                 trackPane.setStyle(style);
             }
         });
 
-        trackPane.setStyle("-fx-background-color: linear-gradient(to right, #2D819D 0%, #969696 0%);");
+        trackPane.setStyle("-fx-background-color: linear-gradient(to right, #89ec40   0%, #969696 0%);");
     });
 
         Platform.runLater(() -> {
@@ -342,14 +343,16 @@ public class MyTunesController implements Initializable {
             sliderVolume.valueProperty().addListener(new ChangeListener<Number>() {
                 public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
                     double percentage = (new_val.doubleValue() / sliderVolume.getMax()) * 100;
-                    String style = String.format("-fx-background-color: linear-gradient(to right, #2D819D %.0f%%, #969696 %.0f%%);",
+                    String style = String.format("-fx-background-color: linear-gradient(to right, #89ec40 %.0f%%, #969696 %.0f%%);",
                             percentage, percentage);
                     trackPane.setStyle(style);
                 }
             });
 
-            trackPane.setStyle("-fx-background-color: linear-gradient(to right, #2D819D 0%, #969696 0%);");
+            trackPane.setStyle("-fx-background-color: linear-gradient(to right, #89ec40 0%, #969696 0%);");
         });
+        sliderDuration.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
+        sliderVolume.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
     }
 
     /**
