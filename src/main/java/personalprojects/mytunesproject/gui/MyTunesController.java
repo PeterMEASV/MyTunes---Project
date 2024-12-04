@@ -114,6 +114,7 @@ public class MyTunesController implements Initializable {
     private boolean isShuffleEnabled = false;
     private List<Song> playedSongs = new ArrayList<>();
     private Song lastPlayedSong;
+    private boolean isRepeatMode = false; // Flag to track repeat mode
 
 
     /**
@@ -607,45 +608,47 @@ public class MyTunesController implements Initializable {
      */
     private void playNewSong(Song song) throws IOException {
         if (mediaPlayer != null) {
-            mediaPlayer.stop(); // Stop any currently playing song
+            mediaPlayer.stop();
         }
 
-        String filePath = song.getFilePath(); // Get the file path of the song
-        File file = new File(filePath); // Create a File object
+        String filePath = song.getFilePath();
+        File file = new File(filePath);
 
         if (!file.exists()) {
-            throw new IOException("File not found: " + filePath); // Throw an exception if the file does not exist
+            throw new IOException("File not found: " + filePath);
         }
 
-        Media media = new Media(file.toURI().toString()); // Create a Media object
-        mediaPlayer = new MediaPlayer(media); // Create a MediaPlayer instance
+        Media media = new Media(file.toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
 
-        // Update currentSongIndex based on the song source
         if (lstPlaylistSongs.getItems().contains(song)) {
             currentSongIndex = lstPlaylistSongs.getItems().indexOf(song);
         } else if (lstSongs.getItems().contains(song)) {
             currentSongIndex = lstSongs.getItems().indexOf(song);
         }
 
-        txtCurrentlyPlaying.setText("Now Playing: " + song.getName() + " by " + song.getArtist()); // Update the UI label
+        txtCurrentlyPlaying.setText("Now Playing: " + song.getName() + " by " + song.getArtist());
 
-        // Set up event handlers for the media player
         mediaPlayer.setOnEndOfMedia(() -> {
-            isPlaying = false; // Update the playing state
-            currentTime = 0; // Reset current time
-            try {
-                btnNextSong(null); // Play the next song
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            if (isRepeatMode) {
+                mediaPlayer.seek(Duration.ZERO);
+                mediaPlayer.play();
+            } else {
+                isPlaying = false;
+                currentTime = 0;
+                try {
+                    btnNextSong(null);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
         mediaPlayer.setOnReady(() -> {
-            double duration = mediaPlayer.getTotalDuration().toSeconds(); // Get the total duration of the song
-            sliderDuration.setMax(duration); // Set the maximum value of the duration slider
-            sliderDuration.setValue(0); // Reset the duration slider
+            double duration = mediaPlayer.getTotalDuration().toSeconds();
+            sliderDuration.setMax(duration);
+            sliderDuration.setValue(0);
 
-            // Update the total duration label
             lblTotalDuration.setText(formatDuration(duration));
 
             mediaPlayer.play();
@@ -654,14 +657,11 @@ public class MyTunesController implements Initializable {
             currentTime = 0;
         });
 
-        // Listener to update currentTime and currentDuration label
         mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
             if (!sliderDuration.isValueChanging()) {
-                sliderDuration.setValue(newValue.toSeconds()); // Update the duration slider
-                currentTime = newValue.toSeconds(); // Update currentTime here
-
-                // Update the current duration label
-                lblCurrentDuration.setText(formatDuration(currentTime)); // Use existing formatDuration method
+                sliderDuration.setValue(newValue.toSeconds());
+                currentTime = newValue.toSeconds();
+                lblCurrentDuration.setText(formatDuration(currentTime));
             }
         });
     }
@@ -1120,6 +1120,14 @@ public class MyTunesController implements Initializable {
 
 
     public void btnRepeat(ActionEvent actionEvent) {
+        isRepeatMode = !isRepeatMode; // Toggle repeat mode
+
+        // Update the button text
+        if (isRepeatMode) {
+            btnRepeat.setText("Repeat On");
+        } else {
+            btnRepeat.setText("Repeat Off");
+        }
     }
 
     @FXML
