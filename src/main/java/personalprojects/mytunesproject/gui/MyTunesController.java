@@ -1108,6 +1108,20 @@ public class MyTunesController implements Initializable {
     public void btnRepeat(ActionEvent actionEvent) {
     }
 
-    public void btnYoutube(ActionEvent actionEvent) {
+    @FXML
+    private void btnYoutube(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/Youtube.fxml"));
+        Parent scene = loader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(scene));
+
+        YoutubeController controller = loader.getController();
+        controller.setParent(this); // Set the parent controller
+
+        stage.setTitle("Youtube");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
 }
