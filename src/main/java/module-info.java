@@ -4,6 +4,7 @@ module personalprojects.mytunesproject {
     requires java.sql;
     requires java.naming;
     requires com.microsoft.sqlserver.jdbc;
+    requires javafx.web;
     requires javafx.media;
 
 
