@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -42,7 +43,14 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class MyTunesController implements Initializable {
+
     // FXML components
+    @FXML
+    private Button btnShuffle;
+    @FXML
+    private Button btnRepeat;
+    @FXML
+    private Button btnYoutube;
     @FXML
     private TextField txtSearch; // Text field for searching songs
     @FXML
@@ -257,6 +265,22 @@ public class MyTunesController implements Initializable {
         // Set initial icon for mute button
         String iconPath = "/personalprojects/mytunesproject/UI Icons/volumeMediumIcon.png";
         setButtonIcon(btnMute, iconPath);
+
+        /*
+        missing png
+        // set initial icon for repeat button
+        String repeatOffPath = "/personalprojects/mytunesproject/UI Icons/.png";
+        setButtonIcon(btnRepeat, repeatOffPath);
+
+        // set initial icon for youtube button
+        String youtubeIcon = "/personalprojects/mytunesproject/.png";
+        setButtonIcon(btnYoutube, youtubeIcon);
+
+        // setInitial icon for shuffleIcon
+        String shuffleIcon = "/personalprojects/mytunesproject/.png";
+        setButtonIcon(btnShuffle, shuffleIcon);
+
+         */
     }
 
     /**
@@ -930,7 +954,7 @@ public class MyTunesController implements Initializable {
      * @param iconPath the path to the icon image
      */
     private void setButtonIcon(Button button, String iconPath) {
-        button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(iconPath)))); // Set the button graphic
+        button.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))))); // Set the button graphic
     }
 
     /**
@@ -1018,5 +1042,14 @@ public class MyTunesController implements Initializable {
     private void OnSongsClick(MouseEvent mouseEvent) {
         lstPlayList.getSelectionModel().clearSelection();
         lstPlaylistSongs.getItems().clear();
+    }
+
+    public void btnShuffle(ActionEvent actionEvent) {
+    }
+
+    public void btnRepeat(ActionEvent actionEvent) {
+    }
+
+    public void btnYoutube(ActionEvent actionEvent) {
     }
 }
