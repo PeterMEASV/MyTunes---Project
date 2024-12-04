@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -110,6 +112,8 @@ public class MyTunesController implements Initializable {
     private boolean muteCheck = false; // Flag to check if the audio is muted
 
     private boolean isShuffleEnabled = false;
+    private List<Song> playedSongs = new ArrayList<>();
+    private Song lastPlayedSong;
 
 
     /**
@@ -1062,7 +1066,6 @@ public class MyTunesController implements Initializable {
         if (isShuffleEnabled) {
             playRandomSong();
         } else {
-            // If shuffle is disabled, reset the current song index
             currentSongIndex = -1;
             txtCurrentlyPlaying.setText("Shuffle disabled. Playing in normal mode.");
         }
@@ -1073,11 +1076,9 @@ public class MyTunesController implements Initializable {
 
         // Check if a playlist is selected
         if (lstPlayList.getSelectionModel().getSelectedItem() != null) {
-            // Get songs from the selected playlist
             Playlist selectedPlaylist = lstPlayList.getSelectionModel().getSelectedItem();
             songs = songModel.getSongsOnPlaylist(selectedPlaylist);
         } else {
-            // Get songs from the main song list
             songs = lstSongs.getItems();
         }
 
@@ -1090,14 +1091,27 @@ public class MyTunesController implements Initializable {
 
         // Generate a random index to select a song
         Random random = new Random();
-        int randomIndex = random.nextInt(songs.size());
+        Song randomSong;
 
-        Song randomSong = songs.get(randomIndex);
+        // Ensure the same song is not played consecutively and exclude the last played song
+        do {
+            int randomIndex = random.nextInt(songs.size());
+            randomSong = songs.get(randomIndex);
+        } while (playedSongs.contains(randomSong) || randomSong.equals(lastPlayedSong));
 
+        // Play the randomly selected song
         try {
-            // Play the randomly selected song
-            playNewSong(randomSong); 
+            playNewSong(randomSong);
             txtCurrentlyPlaying.setText("Now Playing: " + randomSong.getName() + " by " + randomSong.getArtist());
+
+            // Add the song to the played list
+            playedSongs.add(randomSong);
+            lastPlayedSong = randomSong;
+
+            // Check if all songs have been played
+            if (playedSongs.size() == songs.size()) {
+                playedSongs.clear();
+            }
         } catch (IOException e) {
             Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing the random song: " + e.getMessage());
             errorAlert.showAndWait();
