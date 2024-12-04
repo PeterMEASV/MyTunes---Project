@@ -833,6 +833,13 @@ public class MyTunesController implements Initializable {
         boolean itemDeleted = false; // Flag to check if an item was deleted
 
         try {
+            // Stops and disposes the mediaPlayer if it is currently playing the song that the user wants to delete
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+                mediaPlayer.dispose();
+                mediaPlayer = null;
+            }
+
             // Perform deletion based on item type
             if ("playlist".equals(itemType)) {
                 playlistModel.deletePlaylist((Playlist) selectedItem); // Delete the selected playlist
@@ -840,13 +847,12 @@ public class MyTunesController implements Initializable {
             } else if ("songFromPlaylist".equals(itemType)) {
                 songModel.removeSongFromPlaylist(lstPlayList.getSelectionModel().getSelectedItem(), (Song) selectedItem); // Remove song from playlist
                 playlistUpdate();
-
             } else if ("song".equals(itemType)) {
                 removeFromAllPlaylists((Song) selectedItem);
                 songModel.deleteSong((Song) selectedItem); // Delete the selected song
                 itemDeleted = true; // Set flag to true if deletion was successful
 
-                //Deletes song from resources in Songs folder
+                // Deletes song from resources in Songs folder
                 File songFile = new File(((Song) selectedItem).getFilePath());
                 if (songFile.exists()) {
                     boolean fileDeleted = songFile.delete();
@@ -861,10 +867,11 @@ public class MyTunesController implements Initializable {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle("Item Deleted");
                 successAlert.setContentText("The item has been deleted.");
-                successAlert.showAndWait(); // Show success alert after deletion
+                successAlert.showAndWait();
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error deleting the item: " + e.getMessage());
+            errorAlert.showAndWait();
         }
     }
 
