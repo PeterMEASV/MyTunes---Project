@@ -1,34 +1,33 @@
-.root{
+.root {
     -fx-background-color: #2C2C2C;
 }
-.label{
+
+.label {
     -fx-text-fill: white;
-    -fx-font-family: "Times New Roman";
-}
-.table-view {
-    -fx-background-color: #3D3D3D; /* Background color of the table */
-    -fx-border-color: #555555; /* Border color of the table */
-    -fx-border-width: 1; /* Border width */
+    -fx-font-family: "Arial Black";
 }
 
-.table-view .table-header {
+.table-view {
     -fx-background-color: #4A4A4A; /* Header background color */
     -fx-text-fill: white; /* Header text color */
     -fx-font-weight: bold; /* Header text style */
+    -fx-border-width: 2; /* Border width */
+    -fx-border-color: #70a400;
 }
 
-.table-view .table-header .column-header {
-    -fx-background-color: #4A4A4A; /* Column header background color */
-    -fx-text-fill: white; /* Column header text color */
+.table-view .column-header {
+    -fx-background-color: #393939;
+    -fx-border-color: transparent transparent #70a400 transparent; /* Only bottom border */
+    -fx-border-width: 0 0 2px 0; /* Only bottom border width */
 }
 
 .table-view .table-row-cell {
     -fx-background-color: #3D3D3D; /* Row background color */
 }
 
-.table-view .table-cell{
+.table-view .table-cell {
     -fx-text-fill: white; /* Row text color */
-    -fx-font-family: "Times New Roman";
+    -fx-font-family: "Arial Black";
 }
 
 .table-view .table-row-cell:hover {
@@ -36,7 +35,7 @@
 }
 
 .table-view .table-row-cell:selected {
-    -fx-background-color: #007ACC; /* Selected row background color */
+    -fx-background-color: #70a400; /* Selected row background color */
 }
 
 .table-view .table-row-cell:selected .text {
@@ -44,19 +43,12 @@
 }
 
 .table-view .table-row-cell:selected:hover {
-    -fx-background-color: #005FA3; /* Selected row hover background color */
+    -fx-background-color: #7ab400; /* Selected row hover background color */
 }
 
-.table-view .table-column-header {
-    -fx-background-color: #4A4A4A; /* Column header background color */
-    -fx-text-fill: white; /* Column header text color */
-}
-
-.table-view .table-column-header:hover {
-    -fx-background-color: #555555; /* Column header hover background color */
-}
 .slider {
 }
+
 .slider .thumb {
     -fx-background-color: transparent;
     -fx-pref-width: 15;
@@ -65,8 +57,99 @@
     -fx-opacity: 0;
 }
 
-
 .slider:hover .thumb {
     -fx-background-color: white;
     -fx-opacity: 1;
+    -fx-effect: dropshadow(gaussian, rgba(20, 167, 62, 0.5), 20, 0, 0, 0); /* Shadow effect when pressed */
 }
+
+
+#txtCurrentlyPlaying {
+    -fx-font-size: 20;
+}
+
+#txtCurrentlyPlaying2 {
+    -fx-font-size: 10;
+}
+
+.button {
+    -fx-background-color: transparent; /* Set to transparent to see the gradient */
+    -fx-border-color: white;
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Black";
+    -fx-border-radius: 20em;
+    -fx-background-radius: 20em;
+    -fx-scale-x: 1; /* Default scale */
+    -fx-scale-y: 1; /* Default scale */
+}
+
+.button:hover {
+    -fx-background-color: #70a400; /* Change background on hover */
+    -fx-scale-x: 1.1; /* Scale up on hover */
+    -fx-scale-y: 1.1; /* Scale up on hover */
+    -fx-effect: dropshadow(gaussian, rgba(20, 167, 62, 0.5), 25, 0, 0, 0); /* Shadow effect when pressed */
+}
+
+.button:pressed {
+    -fx-effect: dropshadow(gaussian, rgba(20, 167, 62, 0.5), 60, 0, 0, 0); /* Shadow effect when pressed */
+}
+#btnPause {
+    -fx-background-color: transparent; /* Example: Red background */
+    -fx-border-color: transparent; /* Remove border color */
+    -fx-border-width: 0; /* Remove border width */
+    -fx-text-fill: #FFFFFF; /* Example: White text */
+    -fx-font-family: "Arial Black"; /* Keep the same font */
+    -fx-border-radius: 10em; /* Example: Different border radius */
+    -fx-background-radius: 10em; /* Example: Different background radius */
+}
+
+#btnPause:hover {
+    -fx-background-color: #70a400; /* Example: Lighter red on hover */
+}
+
+#btnPause:pressed {
+    -fx-effect: dropshadow(gaussian, rgba(20, 167, 62, 0.5), 30, 0, 0, 0); /* Shadow effect when pressed */
+}
+#btnNext {
+    -fx-background-color: transparent; /* Example: Red background */
+    -fx-border-color: transparent; /* Remove border color */
+    -fx-border-width: 0; /* Remove border width */
+    -fx-text-fill: #FFFFFF; /* Example: White text */
+    -fx-font-family: "Arial Black"; /* Keep the same font */
+    -fx-border-radius: 10em; /* Example: Different border radius */
+    -fx-background-radius: 10em; /* Example: Different background radius */
+}
+
+#btnNext:hover {
+    -fx-background-color: #70a400; /* Example: Lighter red on hover */
+}
+
+#btnNext:pressed {
+    -fx-effect: dropshadow(gaussian, rgba(20, 167, 62, 0.5), 30, 0, 0, 0); /* Shadow effect when pressed */
+}
+#btnPrevious {
+    -fx-background-color: transparent; /* Example: Red background */
+    -fx-border-color: transparent; /* Remove border color */
+    -fx-border-width: 0; /* Remove border width */
+    -fx-text-fill: #FFFFFF; /* Example: White text */
+    -fx-font-family: "Arial Black"; /* Keep the same font */
+    -fx-border-radius: 10em; /* Example: Different border radius */
+    -fx-background-radius: 10em; /* Example: Different background radius */
+}
+
+#btnPrevious:hover {
+    -fx-background-color: #70a400; /* Example: Lighter red on hover */
+}
+
+#btnPrevious:pressed {
+    -fx-effect: dropshadow(gaussian, rgba(20, 167, 62, 0.5), 30, 0, 0, 0); /* Shadow effect when pressed */
+}
+#txtSearch{
+    -fx-font-family: "Arial Black";
+    -fx-text-fill: white;
+    -fx-background-color:#2C2C2C ;
+    -fx-border-color: #70a400 ;
+    -fx-border-radius: 10em; /* Example: Different border radius */
+    -fx-border-width: 2px;
+}
+

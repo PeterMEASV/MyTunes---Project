@@ -117,6 +117,14 @@ public class MyTunesController implements Initializable {
     private List<Song> playedSongs = new ArrayList<>();
     private Song lastPlayedSong;
     private boolean isRepeatMode = false; // Flag to track repeat mode
+    @FXML
+    private Label txtCurrentlyPlaying2;
+    @FXML
+    private Button btnPrevious;
+    @FXML
+    private Button btnPause;
+    @FXML
+    private Button btnNext;
 
 
     /**
@@ -277,22 +285,14 @@ public class MyTunesController implements Initializable {
         // Set initial icon for mute button
         String iconPath = "/personalprojects/mytunesproject/UI Icons/volumeMediumIcon.png";
         setButtonIcon(btnMute, iconPath);
+        sliderDuration.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
+        sliderVolume.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
+        //setButtonIcon(btnShuffle, "/personalprojects/mytunesproject/UI Icons/shuffle.png" );
+        setButtonIcon(btnRepeat, "/personalprojects/mytunesproject/UI Icons/repeat.png" );
+        setButtonIcon(btnNext, "/personalprojects/mytunesproject/UI Icons/next.png" );
+        setButtonIcon(btnPrevious, "/personalprojects/mytunesproject/UI Icons/previous.png" );
+        setButtonIcon(btnPause, "/personalprojects/mytunesproject/UI Icons/pause.png" );
 
-        /*
-        missing png
-        // set initial icon for repeat button
-        String repeatOffPath = "/personalprojects/mytunesproject/UI Icons/.png";
-        setButtonIcon(btnRepeat, repeatOffPath);
-
-        // set initial icon for youtube button
-        String youtubeIcon = "/personalprojects/mytunesproject/.png";
-        setButtonIcon(btnYoutube, youtubeIcon);
-
-        // setInitial icon for shuffleIcon
-        String shuffleIcon = "/personalprojects/mytunesproject/.png";
-        setButtonIcon(btnShuffle, shuffleIcon);
-
-         */
 // Duration Slider setup
         executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(() -> {
@@ -301,7 +301,7 @@ public class MyTunesController implements Initializable {
                     sliderDuration.setValue(mediaPlayer.getCurrentTime().toSeconds());
                 });
             }
-        }, 0, 1200, TimeUnit.MILLISECONDS);
+        }, 0, 100, TimeUnit.MILLISECONDS);
         executorService.shutdown();
 
         // Listener for song selection
@@ -321,6 +321,7 @@ public class MyTunesController implements Initializable {
                 }
             }
         });
+
         Platform.runLater(() -> {
         StackPane trackPane = (StackPane) sliderDuration.lookup(".track");
 
@@ -351,9 +352,9 @@ public class MyTunesController implements Initializable {
 
             trackPane.setStyle("-fx-background-color: linear-gradient(to right, #89ec40 0%, #969696 0%);");
         });
-        sliderDuration.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
-        sliderVolume.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
     }
+
+
 
     /**
      * Plays the selected song from the song list.
@@ -598,12 +599,6 @@ public class MyTunesController implements Initializable {
      *
      * @param actionEvent the action event triggered by the button
      */
-    @FXML
-    private void btnCloseProgram(ActionEvent actionEvent) {
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.close(); // Close the current stage
-        System.exit(0); // Exit the application
-    }
 
     /**
      * Displays an error message in case of an exception.
@@ -633,16 +628,19 @@ public class MyTunesController implements Initializable {
         try {
             if (mediaPlayer != null) {
                 if (isPlaying) {
+                    setButtonIcon(btnPause, "/personalprojects/mytunesproject/UI Icons/play2.png");
                     currentTime = mediaPlayer.getCurrentTime().toSeconds(); // Save the current playback time
                     mediaPlayer.pause(); // Pause the media player
                     isPlaying = false; // Update the playing state
                     txtCurrentlyPlaying.setText("Paused"); // Update the UI label
                 } else {
                     if (selectedSong != null) {
+                        setButtonIcon(btnPause, "/personalprojects/mytunesproject/UI Icons/pause.png");
                         mediaPlayer.seek(Duration.seconds(currentTime)); // Seek to the saved time
                         mediaPlayer.play(); // Play the media
                         isPlaying = true; // Update the playing state
-                        txtCurrentlyPlaying.setText("Now Playing: " + selectedSong.getName() + " by " + selectedSong.getArtist()); // Update the UI label
+                        txtCurrentlyPlaying.setText(selectedSong.getName());
+                        txtCurrentlyPlaying2.setText(selectedSong.getArtist());// Update the UI label
                     } else{
                         Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a song to play.");
                         alert.showAndWait(); // Show warning if no song is selected
@@ -687,11 +685,15 @@ public class MyTunesController implements Initializable {
 
         if (lstPlaylistSongs.getItems().contains(song)) {
             currentSongIndex = lstPlaylistSongs.getItems().indexOf(song);
+            lstPlaylistSongs.getSelectionModel().select(currentSongIndex);
         } else if (lstSongs.getItems().contains(song)) {
             currentSongIndex = lstSongs.getItems().indexOf(song);
+            lstSongs.getSelectionModel().select(currentSongIndex);
         }
 
-        txtCurrentlyPlaying.setText("Now Playing: " + song.getName() + " by " + song.getArtist());
+        txtCurrentlyPlaying.setText(song.getName());
+        txtCurrentlyPlaying2.setText(song.getArtist());
+
 
         mediaPlayer.setOnEndOfMedia(() -> {
             if (isRepeatMode) {
@@ -737,8 +739,10 @@ public class MyTunesController implements Initializable {
      */
     public void btnNextSong(ActionEvent actionEvent) throws Exception {
         if (isShuffleEnabled) {
+
             playRandomSong();
         } else {
+
             // Normal play mode
             ObservableList<Song> songs;
 
@@ -1128,10 +1132,11 @@ public class MyTunesController implements Initializable {
         isShuffleEnabled = !isShuffleEnabled; // Toggle shuffle mode
 
         if (isShuffleEnabled) {
+            btnShuffle.setText("Shuffle On");
             playRandomSong();
         } else {
+            btnShuffle.setText("Shuffle Off");
             currentSongIndex = -1;
-            txtCurrentlyPlaying.setText("Shuffle disabled. Playing in normal mode.");
         }
     }
 
@@ -1166,7 +1171,8 @@ public class MyTunesController implements Initializable {
         // Play the randomly selected song
         try {
             playNewSong(randomSong);
-            txtCurrentlyPlaying.setText("Now Playing: " + randomSong.getName() + " by " + randomSong.getArtist());
+            txtCurrentlyPlaying.setText(randomSong.getName());
+            txtCurrentlyPlaying2.setText(randomSong.getArtist());
 
             // Add the song to the played list
             playedSongs.add(randomSong);
@@ -1188,9 +1194,11 @@ public class MyTunesController implements Initializable {
 
         // Update the button text
         if (isRepeatMode) {
-            btnRepeat.setText("Repeat On");
+            btnRepeat.setGraphic(null);
+            setButtonIcon(btnRepeat, "/personalprojects/mytunesproject/UI Icons/repeatgreen.png");
         } else {
-            btnRepeat.setText("Repeat Off");
+            btnRepeat.setGraphic(null);
+            setButtonIcon(btnRepeat, "/personalprojects/mytunesproject/UI Icons/repeat.png");
         }
     }
 
