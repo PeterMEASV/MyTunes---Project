@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Objects;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -107,6 +108,9 @@ public class MyTunesController implements Initializable {
     private ScheduledExecutorService executorService; // Executor service for updating UI components
     private double volumeNumber = 50; // Current volume level
     private boolean muteCheck = false; // Flag to check if the audio is muted
+
+    private boolean isShuffleEnabled = false;
+
 
     /**
      * Constructor for MyTunesController.
@@ -625,7 +629,11 @@ public class MyTunesController implements Initializable {
         mediaPlayer.setOnEndOfMedia(() -> {
             isPlaying = false; // Update the playing state
             currentTime = 0; // Reset current time
-            btnNextSong(null); // Play the next song
+            try {
+                btnNextSong(null); // Play the next song
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
 
         mediaPlayer.setOnReady(() -> {
@@ -634,12 +642,12 @@ public class MyTunesController implements Initializable {
             sliderDuration.setValue(0); // Reset the duration slider
 
             // Update the total duration label
-            lblTotalDuration.setText(formatDuration(duration)); // Use existing formatDuration method
+            lblTotalDuration.setText(formatDuration(duration));
 
-            mediaPlayer.play(); // Start playing the media
-            mediaPlayer.setVolume(volumeNumber); // Set the volume
-            isPlaying = true; // Update the playing state
-            currentTime = 0; // Reset current time when a new song starts
+            mediaPlayer.play();
+            mediaPlayer.setVolume(volumeNumber);
+            isPlaying = true;
+            currentTime = 0;
         });
 
         // Listener to update currentTime and currentDuration label
@@ -659,33 +667,37 @@ public class MyTunesController implements Initializable {
      *
      * @param actionEvent the action event triggered by the button
      */
-    public void btnNextSong(ActionEvent actionEvent) {
-        ObservableList<Song> songs;
-
-        if (currentSongIndex >= 0 && currentSongIndex < lstPlaylistSongs.getItems().size()) {
-            songs = lstPlaylistSongs.getItems(); // Get the songs from the playlist
+    public void btnNextSong(ActionEvent actionEvent) throws Exception {
+        if (isShuffleEnabled) {
+            playRandomSong();
         } else {
-            songs = lstSongs.getItems(); // Fallback to the main song list
-        }
+            // Normal play mode
+            ObservableList<Song> songs;
 
-        if (songs.isEmpty()) {
-            txtCurrentlyPlaying.setText("No songs in the playlist.");
-            return;
-        }
+            if (currentSongIndex >= 0 && currentSongIndex < lstPlaylistSongs.getItems().size()) {
+                songs = lstPlaylistSongs.getItems(); // Get the songs from the playlist
+            } else {
+                songs = lstSongs.getItems(); // Fallback to the main song list
+            }
 
-        // Increment the currentSongIndex and check for bounds
-        currentSongIndex++;
-        if (currentSongIndex >= songs.size()) {
-            currentSongIndex = 0; // Wrap around to the first song if at the end
-        }
+            if (songs.isEmpty()) {
+                txtCurrentlyPlaying.setText("No songs in the playlist.");
+                return;
+            }
 
-        Song nextSong = songs.get(currentSongIndex);
+            // Increment the currentSongIndex and check for bounds
+            currentSongIndex++;
+            if (currentSongIndex >= songs.size()) {
+                currentSongIndex = 0; // Wrap around to the first song if at the end
+            }
 
-        try {
-            playNewSong(nextSong);
-        } catch (Exception e) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing the next song: " + e.getMessage());
-            errorAlert.showAndWait();
+            Song nextSong = songs.get(currentSongIndex);
+            try {
+                playNewSong(nextSong);
+            } catch (Exception e) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing the next song: " + e.getMessage());
+                errorAlert.showAndWait();
+            }
         }
     }
 
@@ -1044,8 +1056,54 @@ public class MyTunesController implements Initializable {
         lstPlaylistSongs.getItems().clear();
     }
 
-    public void btnShuffle(ActionEvent actionEvent) {
+    public void btnShuffle(ActionEvent actionEvent) throws Exception {
+        isShuffleEnabled = !isShuffleEnabled; // Toggle shuffle mode
+
+        if (isShuffleEnabled) {
+            playRandomSong();
+        } else {
+            // If shuffle is disabled, reset the current song index
+            currentSongIndex = -1;
+            txtCurrentlyPlaying.setText("Shuffle disabled. Playing in normal mode.");
+        }
     }
+
+    private void playRandomSong() throws Exception {
+        ObservableList<Song> songs;
+
+        // Check if a playlist is selected
+        if (lstPlayList.getSelectionModel().getSelectedItem() != null) {
+            // Get songs from the selected playlist
+            Playlist selectedPlaylist = lstPlayList.getSelectionModel().getSelectedItem();
+            songs = songModel.getSongsOnPlaylist(selectedPlaylist);
+        } else {
+            // Get songs from the main song list
+            songs = lstSongs.getItems();
+        }
+
+        // Check if there are any songs to play
+        if (songs.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "No songs available to play.");
+            alert.showAndWait();
+            return;
+        }
+
+        // Generate a random index to select a song
+        Random random = new Random();
+        int randomIndex = random.nextInt(songs.size());
+
+        Song randomSong = songs.get(randomIndex);
+
+        try {
+            // Play the randomly selected song
+            playNewSong(randomSong); 
+            txtCurrentlyPlaying.setText("Now Playing: " + randomSong.getName() + " by " + randomSong.getArtist());
+        } catch (IOException e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error playing the random song: " + e.getMessage());
+            errorAlert.showAndWait();
+        }
+    }
+
 
     public void btnRepeat(ActionEvent actionEvent) {
     }
