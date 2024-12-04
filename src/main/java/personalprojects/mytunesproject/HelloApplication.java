@@ -15,7 +15,7 @@ public class HelloApplication extends Application {
         stage.setTitle("My Tunes");
         stage.setScene(scene);
         stage.show();
-        stage.setResizable(false);
+        stage.setResizable(true);
 
     }
 
