@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="254.0" prefWidth="415.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personalprojects.mytunesproject.gui.NewSongController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="254.0" prefWidth="415.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personalprojects.mytunesproject.gui.NewSongController">
    <children>
       <Label layoutX="92.0" layoutY="28.0" text="Title:" />
       <Label layoutX="89.0" layoutY="71.0" text="Artist:" />
@@ -17,9 +17,9 @@
       <TextField fx:id="txtSongArtist" layoutX="145.0" layoutY="67.0" promptText="Enter Artist name" />
       <TextField fx:id="txtFileName" layoutX="143.0" layoutY="143.0" promptText="Input file path" />
       <Button layoutX="325.0" layoutY="143.0" mnemonicParsing="false" onAction="#btnChooseFile" text="Choose" />
-      <Button layoutX="272.0" layoutY="194.0" mnemonicParsing="false" onAction="#btnCancelNewSong" text="Cancel" />
+      <Button layoutX="251.0" layoutY="194.0" mnemonicParsing="false" onAction="#btnCancelNewSong" text="Cancel" />
       <Button layoutX="337.0" layoutY="194.0" mnemonicParsing="false" onAction="#btnSaveSong" text="Save" />
       <ChoiceBox fx:id="DropDownCategory" layoutX="145.0" layoutY="102.0" prefHeight="25.0" prefWidth="83.0" />
-      <Label fx:id="lblTimer" layoutX="144.0" layoutY="177.0" text="00:00" />
+      <Label fx:id="lblTimer" layoutX="165.0" layoutY="177.0" text="00:00" />
    </children>
 </AnchorPane>

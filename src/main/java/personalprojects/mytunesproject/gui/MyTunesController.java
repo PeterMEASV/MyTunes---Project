@@ -292,6 +292,7 @@ public class MyTunesController implements Initializable {
         setButtonIcon(btnNext, "/personalprojects/mytunesproject/UI Icons/next.png" );
         setButtonIcon(btnPrevious, "/personalprojects/mytunesproject/UI Icons/previous.png" );
         setButtonIcon(btnPause, "/personalprojects/mytunesproject/UI Icons/pause.png" );
+        setButtonIcon(btnShuffle, "/personalprojects/mytunesproject/UI Icons/shuffleOff.png");
 
 // Duration Slider setup
         executorService = Executors.newSingleThreadScheduledExecutor();
@@ -550,6 +551,7 @@ public class MyTunesController implements Initializable {
         Parent scene = loader.load();
 
         Stage stage = new Stage();
+        scene.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
         stage.setScene(new Scene(scene));
 
         NewSongController controller = loader.getController();
@@ -1132,10 +1134,12 @@ public class MyTunesController implements Initializable {
         isShuffleEnabled = !isShuffleEnabled; // Toggle shuffle mode
 
         if (isShuffleEnabled) {
-            btnShuffle.setText("Shuffle On");
+            btnShuffle.setGraphic(null);
+            setButtonIcon(btnShuffle, "/personalprojects/mytunesproject/UI Icons/shuffleOn.png");
             playRandomSong();
         } else {
-            btnShuffle.setText("Shuffle Off");
+            btnShuffle.setGraphic(null);
+            setButtonIcon(btnShuffle, "/personalprojects/mytunesproject/UI Icons/shuffleOff.png");
             currentSongIndex = -1;
         }
     }
