@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SongDAO_DB implements ISongDataAccess {
-    DBConnector db;
+    private DBConnector db;
 
     public SongDAO_DB() throws IOException {
-        db =new DBConnector();
+        db = new DBConnector();// Database connector instance
     }
 
     @Override
@@ -45,6 +45,13 @@ public class SongDAO_DB implements ISongDataAccess {
         }
     }
 
+    /**
+     * Creates a new song in the database.
+     *
+     * @param newSong the song to be created
+     * @return the created song with its generated ID
+     * @throws Exception if an error occurs while creating the song
+     */
     @Override
     public Song CreateSong(Song newSong) throws Exception {
         String sql = "INSERT INTO dbo.Songs(Name, Artist, Duration, Category, FilePath) VALUES (?,?,?,?,?)";
@@ -74,6 +81,11 @@ public class SongDAO_DB implements ISongDataAccess {
         }
     }
 
+    /**
+     * Updates an existing song in the database.
+     *
+     * @param song the song with updated information
+     */
     @Override
     public void updateSong(Song song) {
         String sql = "UPDATE dbo.Songs SET Name = ?, Artist = ?, Duration = ?, Category = ?, FilePath = ? WHERE SongID = ?";
@@ -95,6 +107,12 @@ public class SongDAO_DB implements ISongDataAccess {
         }
     }
 
+    /**
+     * Deletes a song from the database.
+     *
+     * @param song the song to be deleted
+     * @throws Exception if an error occurs while deleting the song
+     */
     @Override
     public void deleteSong(Song song) throws Exception {
         String sql = "DELETE FROM dbo.Songs WHERE SongID = ?";

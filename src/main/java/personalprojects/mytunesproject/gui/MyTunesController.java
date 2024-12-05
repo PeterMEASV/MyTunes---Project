@@ -282,7 +282,7 @@ public class MyTunesController implements Initializable {
         });
 
 
-        // Set initial icon for mute button
+        // Set initial icon for UI
         String iconPath = "/personalprojects/mytunesproject/UI Icons/volumeMediumIcon.png";
         setButtonIcon(btnMute, iconPath);
         sliderDuration.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
@@ -294,7 +294,7 @@ public class MyTunesController implements Initializable {
         setButtonIcon(btnPause, "/personalprojects/mytunesproject/UI Icons/pause.png" );
         setButtonIcon(btnShuffle, "/personalprojects/mytunesproject/UI Icons/shuffleOff.png");
 
-// Duration Slider setup
+        // Duration Slider setup
         executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(() -> {
             if (mediaPlayer != null && !sliderDuration.isValueChanging()) {
@@ -459,16 +459,17 @@ public class MyTunesController implements Initializable {
     }
 
     /**
+     * Updates the specified playlist.
      *
-     * @param playlist
-     * @throws Exception
+     * @param playlist the playlist to be updated
+     * @throws Exception if an error occurs during the update
      */
     public void updatePlaylist(Playlist playlist) throws Exception {
         playlistModel.updatePlaylist(playlist);
     }
 
     /**
-     * Moves the selected song up in the playlist (not yet implemented).
+     * Moves the selected song up in the playlist
      *
      * @param actionEvent the action event triggered by the button
      */
@@ -505,7 +506,7 @@ public class MyTunesController implements Initializable {
     }
 
     /**
-     * Moves the selected song down in the playlist (not yet implemented).
+     * Moves the selected song down in the playlist
      *
      * @param actionEvent the action event triggered by the button
      */
@@ -598,12 +599,6 @@ public class MyTunesController implements Initializable {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show(); // Show the edit song dialog
     }
-
-    /**
-     * Closes the application when the close button is pressed.
-     *
-     * @param actionEvent the action event triggered by the button
-     */
 
     /**
      * Displays an error message in case of an exception.
@@ -741,6 +736,7 @@ public class MyTunesController implements Initializable {
      * Plays the next song in the list.
      *
      * @param actionEvent the action event triggered by the button
+     * @throws Exception if an error occurs while playing the next song
      */
     public void btnNextSong(ActionEvent actionEvent) throws Exception {
         if (isShuffleEnabled) {
@@ -854,6 +850,7 @@ public class MyTunesController implements Initializable {
      * Deletes a song from the selected playlist.
      *
      * @param actionEvent the action event triggered by the button
+     * @throws Exception if an error occurs while deleting the song
      */
     @FXML
     private void btnDeleteFromPlaylist(ActionEvent actionEvent) throws Exception {
@@ -888,8 +885,6 @@ public class MyTunesController implements Initializable {
             return; // Exit if no song is selected
         }
 
-        System.out.println("Attempting to delete song: " + selectedSong.getName()); // Debug output
-
         try {
             deleteItem(selectedSong, "song", false);// Call delete method
             UpdateSongs(); // Refresh the song list
@@ -904,6 +899,7 @@ public class MyTunesController implements Initializable {
      *
      * @param selectedItem the item to be deleted
      * @param itemType    the type of item (playlist, song, or songFromPlaylist)
+     * @param bypass      whether to bypass confirmation
      */
     private void deleteItem(Object selectedItem, String itemType, boolean bypass) {
         if (selectedItem == null) {
@@ -941,7 +937,12 @@ public class MyTunesController implements Initializable {
         }
     }
 
-    // Method to encapsulate the deletion logic
+    /**
+     * Encapsulates the deletion logic for the specified item.
+     *
+     * @param selectedItem the item to be deleted
+     * @param itemType    the type of item (playlist, song, or songFromPlaylist)
+     */
     private void performDeletion(Object selectedItem, String itemType) {
         boolean itemDeleted = false; // Flag to check if an item was deleted
 
@@ -1061,6 +1062,7 @@ public class MyTunesController implements Initializable {
      * Updates the playlist view when a playlist is selected.
      *
      * @param mouseEvent the mouse event triggered by the selection
+     * @throws Exception if an error occurs while updating the playlist
      */
     @FXML
     private void playlistSelection(MouseEvent mouseEvent) throws Exception {
@@ -1099,6 +1101,11 @@ public class MyTunesController implements Initializable {
         return String.format("%02d:%02d", minutes, secs);
     }
 
+    /**
+     * Removes the specified song from all playlists.
+     *
+     * @param selectedSong the song to be removed
+     */
     private void removeFromAllPlaylists(Song selectedSong){
             for(int i = 0; i < lstPlayList.getItems().size(); i++){
                 lstPlayList.getSelectionModel().select(i);
@@ -1115,6 +1122,13 @@ public class MyTunesController implements Initializable {
                 }
             }
     }
+
+    /**
+     * Formats the given duration in seconds into a string representation.
+     *
+     * @param duration the duration in seconds
+     * @return a formatted string in the format HH:mm:ss
+     */
     public String getFormattedTime(int duration){
         int seconds = duration % 60;
         int minutes = duration / 60;
@@ -1127,12 +1141,25 @@ public class MyTunesController implements Initializable {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
+
+    /**
+     * Handles the click event on the songs list, clearing the playlist selection.
+     *
+     * @param mouseEvent the mouse event triggered by the click
+     */
     @FXML
     private void OnSongsClick(MouseEvent mouseEvent) {
         lstPlayList.getSelectionModel().clearSelection();
         lstPlaylistSongs.getItems().clear();
     }
 
+
+    /**
+     * Toggles shuffle mode for song playback.
+     *
+     * @param actionEvent the action event triggered by the button
+     * @throws Exception if an error occurs while toggling shuffle
+     */
     public void btnShuffle(ActionEvent actionEvent) throws Exception {
         isShuffleEnabled = !isShuffleEnabled; // Toggle shuffle mode
 
@@ -1147,6 +1174,11 @@ public class MyTunesController implements Initializable {
         }
     }
 
+    /**
+     * Plays a random song from the available songs.
+     *
+     * @throws Exception if an error occurs while playing a random song
+     */
     private void playRandomSong() throws Exception {
         ObservableList<Song> songs;
 
@@ -1195,7 +1227,11 @@ public class MyTunesController implements Initializable {
         }
     }
 
-
+    /**
+     * Toggles repeat mode for song playback.
+     *
+     * @param actionEvent the action event triggered by the button
+     */
     public void btnRepeat(ActionEvent actionEvent) {
         isRepeatMode = !isRepeatMode; // Toggle repeat mode
 
@@ -1209,6 +1245,12 @@ public class MyTunesController implements Initializable {
         }
     }
 
+    /**
+     * Opens the YouTube dialog for video playback.
+     *
+     * @param actionEvent the action event triggered by the button
+     * @throws Exception if an error occurs while opening the YouTube dialog
+     */
     @FXML
     private void btnYoutube(ActionEvent actionEvent) throws Exception {
         FXMLLoader loader = new FXMLLoader();

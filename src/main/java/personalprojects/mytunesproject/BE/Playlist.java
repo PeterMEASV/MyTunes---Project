@@ -45,7 +45,7 @@ public class Playlist {
         this.totalDuration.set(totalDuration);
     }
 
-    // Getter for playlistID
+    // Getters and setters for playlistID
     public int getPlaylistID() {
         return playlistID;
     }

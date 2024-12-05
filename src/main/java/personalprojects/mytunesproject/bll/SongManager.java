@@ -13,7 +13,6 @@ import java.util.List;
 
 public class SongManager {
 
-    //private SongSearcher songSearcher = new SongSearcher();
     private ISongDataAccess songDAO_db;
      private PlaylistSongsDAO_DB playlistSongsDAO_DB;
 

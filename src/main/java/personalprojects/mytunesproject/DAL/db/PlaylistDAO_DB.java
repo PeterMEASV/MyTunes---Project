@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlaylistDAO_DB implements IPlaylistDataAccess {
-    DBConnector db;
+    private DBConnector db;
+
     public PlaylistDAO_DB() throws IOException {
         db = new DBConnector();
     }
@@ -41,6 +42,13 @@ public class PlaylistDAO_DB implements IPlaylistDataAccess {
         }
     }
 
+    /**
+     * Creates a new playlist in the database.
+     *
+     * @param playlist the name of the playlist to be created
+     * @return the created playlist with its generated ID
+     * @throws Exception if an error occurs while creating the playlist
+     */
     @Override
     public Playlist createPlaylist(String playlist) throws Exception {
         String sql = "INSERT INTO dbo.Playlists(Name) VALUES (?)";
@@ -67,6 +75,13 @@ public class PlaylistDAO_DB implements IPlaylistDataAccess {
         }
     }
 
+    /**
+     * Updates an existing playlist in the database.
+     *
+     * @param playlist the playlist with updated information
+     * @return the updated playlist
+     * @throws Exception if an error occurs while updating the playlist
+     */
     @Override
     public Playlist updatePlaylist(Playlist playlist) throws Exception {
         String sql = "UPDATE dbo.Playlists SET Name = ? WHERE PlaylistID = ?";
@@ -92,6 +107,12 @@ public class PlaylistDAO_DB implements IPlaylistDataAccess {
         }
     }
 
+    /**
+     * Deletes a playlist from the database.
+     *
+     * @param playlist the playlist to be deleted
+     * @throws Exception if an error occurs while deleting the playlist
+     */
     @Override
     public void deletePlaylist(Playlist playlist) throws Exception {
         try(Connection conn = db.getConnection())
