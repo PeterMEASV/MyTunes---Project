@@ -12,7 +12,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/personalprojects/mytunesproject/My-Tunes.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 788, 600);
         scene.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
         stage.setTitle("My Tunes");
         stage.setScene(scene);

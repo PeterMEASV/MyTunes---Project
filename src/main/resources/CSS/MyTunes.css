@@ -146,7 +146,7 @@
 #btnPrevious:pressed {
     -fx-effect: dropshadow(gaussian, rgba(20, 167, 62, 0.5), 30, 0, 0, 0);
 }
-#txtSearch{
+.text-field{
     -fx-font-family: "Arial Black";
     -fx-text-fill: white;
     -fx-background-color:#2C2C2C ;
@@ -154,11 +154,17 @@
     -fx-border-radius: 10em;
     -fx-border-width: 2px;
 }
-
-
-
-#btnYoutube:hover{
+#btnYoutube:hover {
     -fx-background-color: #aa0000; /* Example: Lighter red on hover */
     -fx-effect: dropshadow(gaussian, #db0000, 25, 0, 0, 0);
+}
+.choice-box{
+    -fx-background-color: #555555;
+}
+.context-menu {
+    -fx-background-color: #3D3D3D;
+}
+#choice-box-menu-item:hover {
+    -fx-background-color: #70a400;
 }
 

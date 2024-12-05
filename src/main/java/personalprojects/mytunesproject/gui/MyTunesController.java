@@ -417,6 +417,7 @@ public class MyTunesController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Playlist.fxml"));
         Parent scene = loader.load();
+        scene.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
 
         Stage stage = new Stage();
         stage.setScene(new Scene(scene));
@@ -442,6 +443,7 @@ public class MyTunesController implements Initializable {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Playlist.fxml"));
             Parent scene = loader.load();
+            scene.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
 
             Stage stage = new Stage();
             stage.setScene(new Scene(scene));
@@ -583,6 +585,7 @@ public class MyTunesController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/personalprojects/mytunesproject/New-Edit-Songs.fxml"));
         Parent scene = loader.load();
+        scene.getStylesheets().add(getClass().getResource("/CSS/MyTunes.css").toExternalForm());
 
         Stage stage = new Stage();
         stage.setScene(new Scene(scene));
