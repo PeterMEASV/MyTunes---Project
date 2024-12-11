@@ -959,33 +959,48 @@ public class MyTunesController implements Initializable {
                 playlistModel.deletePlaylist((Playlist) selectedItem); // Delete the selected playlist
                 itemDeleted = true; // Set flag to true if deletion was successful
             } else if ("songFromPlaylist".equals(itemType)) {
-                songModel.removeSongFromPlaylist(lstPlayList.getSelectionModel().getSelectedItem(), (Song) selectedItem); // Remove song from playlist
-                playlistUpdate();
+                // Remove song from playlist
+                Song songToDelete = (Song) selectedItem;
+                songModel.removeSongFromPlaylist(lstPlayList.getSelectionModel().getSelectedItem(), songToDelete); // Remove song from playlist
+                playlistUpdate(); // Update the playlist view
             } else if ("song".equals(itemType)) {
                 removeFromAllPlaylists((Song) selectedItem);
-                songModel.deleteSong((Song) selectedItem); // Delete the selected song
+                songModel.deleteSong((Song) selectedItem);
                 itemDeleted = true; // Set flag to true if deletion was successful
 
                 // Deletes song from resources in Songs folder
                 File songFile = new File(((Song) selectedItem).getFilePath());
                 if (songFile.exists()) {
-                    boolean fileDeleted = songFile.delete();
-                    if (!fileDeleted) {
-                        throw new IOException("Failed to delete the file: " + songFile.getAbsolutePath());
-                    }
+                    // Using Platform.runLater(), because using it up in initialize with mediaPlayer broke this :P
+                    Platform.runLater(() -> {
+                        boolean fileDeleted = songFile.delete();
+                        if (!fileDeleted) {
+                            System.out.println("Failed to delete the file: " + songFile.getAbsolutePath());
+                            try {
+                                throw new IOException("Failed to delete the file: " + songFile.getAbsolutePath());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
                 }
             }
 
             // Show success alert only if an item was deleted
             if (itemDeleted) {
-                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Item Deleted");
-                successAlert.setContentText("The item has been deleted.");
-                successAlert.showAndWait();
+                //Using Platform.runLater() because of the code above
+                Platform.runLater(() -> {
+                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                    successAlert.setTitle("Item Deleted");
+                    successAlert.setContentText("The item has been deleted.");
+                    successAlert.showAndWait();
+                });
             }
         } catch (Exception e) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error deleting the item: " + e.getMessage());
-            errorAlert.showAndWait();
+            Platform.runLater(() -> {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error deleting the item: " + e.getMessage());
+                errorAlert.showAndWait();
+            });
         }
     }
 
