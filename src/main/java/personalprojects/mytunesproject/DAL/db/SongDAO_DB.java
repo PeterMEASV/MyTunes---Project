@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SongDAO_DB implements ISongDataAccess {
-    private DBConnector db;
+    DBConnector db;
 
     public SongDAO_DB() throws IOException {
         db = new DBConnector();// Database connector instance

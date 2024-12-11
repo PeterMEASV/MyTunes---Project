@@ -20,6 +20,7 @@ import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.StandardCopyOption;
 
 public class NewSongController {
     @FXML
@@ -103,17 +104,19 @@ public class NewSongController {
     @FXML
     private void btnSaveSong(ActionEvent actionEvent) throws Exception {
         if (!txtSongTitle.getText().isEmpty() && !txtSongArtist.getText().isEmpty() && !lblTimer.getText().isEmpty() && DropDownCategory.getValue() != null && !txtFileName.getText().isEmpty()) {
-            if (songDuration < 0){
+            if (songDuration < 0) {
                 showErrorAlert("Invalid Duration", "Please select a valid music file(.mp3 or .wav) to get duration.");
+                return; // Exit if duration is invalid
             }
+
             String songGenre = DropDownCategory.getValue();
 
             // Define the destination directory
             String destinationDir = "src/main/resources/personalprojects/mytunesproject/Songs";
             Path destinationPath = Paths.get(destinationDir, new File(txtFileName.getText()).getName());
 
-            // Copy the file to the destination directory
-            Files.copy(Paths.get(txtFileName.getText()), destinationPath);
+            // Copy the file to the destination directory, overwriting if it exists
+            Files.copy(Paths.get(txtFileName.getText()), destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
             // Get the new file path
             String newFilePath = destinationPath.toString();

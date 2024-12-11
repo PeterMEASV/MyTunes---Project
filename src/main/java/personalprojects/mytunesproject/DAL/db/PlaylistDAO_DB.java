@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlaylistDAO_DB implements IPlaylistDataAccess {
-    private DBConnector db;
+    DBConnector db;
 
     public PlaylistDAO_DB() throws IOException {
         db = new DBConnector();
